@@ -1,0 +1,170 @@
+IREKEONIBUDO 3D — MESHY / TRIPO PROMPT LIST
+==============================================
+Matches GameObjects created in Assets/Editor/SceneSetupWizard.cs.
+Source: Ìrèké Oníbùdó (1949) by D.O. Fagunwa — a shipwrecked traveler in
+Arogidigba's undersea kingdom, guided by his dead mother's spirit.
+
+Generate in the priority order listed. Set Pose = T-Pose for items marked
+[RIGGED] since those need animation. Same workflow as ogbojuode-3d: prefer
+Smart Mesh over HD Model for game-ready topology on a mobile target.
+
+
+1. Player_Ireke_Onibudo  [RIGGED — CHARACTER]
+------------------------------------------------
+Full-body 3D game character, a young 19th-century Yoruba traveler,
+shipwrecked and soaked, wearing a simple woven wrapper cloth and a torn
+shirt. Lean build, alert and wary expression, dark skin, short natural
+hair, barefoot. Carrying a plain wooden blade at the hip. Stylized
+dark-fantasy game-ready model, clean quad topology, T-pose, ready for
+auto-rigging.
+
+
+2. Arogidigba_Mermaid_Queen  [RIGGED — RIDDLE BOSS]
+-------------------------------------------------------
+A regal mermaid queen, human from the waist up and a large fish from the
+waist down, pale greenish-blue skin with a faint scale pattern climbing
+her arms and shoulders, long dark hair drifting as if underwater, an
+ornate coral crown, calm and commanding expression rather than monstrous.
+Mystical, dignified bearing, stylized realism, game-ready, T-pose.
+
+
+3. Warrior_Fish_Eja_Jagunjagun  [TITAN — TOWERING GUARD]
+-------------------------------------------------------------
+A towering humanoid fish-warrior guarding an undersea kingdom, thick
+armored scales in deep blue and silver, gilled neck, clawed webbed
+hands gripping a coral-tipped spear, hulking intimidating posture.
+Afro-surrealist dark-fantasy creature, highly detailed, game-ready,
+T-pose or idle stance.
+
+
+4. Wrestler_Cat_Ologbo_Ijakadi  [BRUTE — HULKING]
+-------------------------------------------------------
+A hulking anthropomorphic wrestler-cat creature, thick muscular build
+standing upright, coarse dark fur, scarred face from many fights,
+oversized clawed paws raised in a wrestling stance, aggressive
+expression. Game-ready creature model, clean topology, dark-fantasy
+style.
+
+
+5. Flying_Snake_Ejo_Fifo  [SWIFT — AERIAL]
+------------------------------------------------
+A large serpent with a pair of feathered wings mid-flight, iridescent
+dark green and gold scales, coiled sinuous body, sharp fangs, talons
+gripping empty air as if just having snatched something. Low-poly
+game-ready, dark-fantasy style, dynamic flying pose.
+
+
+6. Mother_Spirit_Guide_Iya_Ireke  [WANDERING GUIDE]
+---------------------------------------------------------
+A translucent, gently glowing spirit of a Yoruba mother, softly flowing
+white and pale-blue wrapper cloth, serene protective expression, faint
+luminous outline as if seen in a dream rather than solid. Low-poly,
+optimized for a mobile game, ethereal and comforting rather than
+frightening.
+
+
+7. Spear (Ọ̀kọ̀ Ẹja)
+----------------------
+Low-poly game prop, a simple wooden fishing spear with a sharpened
+bone or stone tip bound on with cord, weathered wood shaft. Clean
+topology for a handheld thrown-weapon prop.
+
+
+8. Blade (Idà)
+-----------------
+Low-poly game prop, a plain single-edged traveler's blade with a
+worn wooden handle wrapped in cord, no ornate carving — practical
+rather than ceremonial, showing signs of hard use. Game-ready, clean
+topology.
+
+
+9. Riverside_Hut
+-------------------
+Modular 3D game prop, a simple riverside Yoruba mud hut with a conical
+thatched roof, mud-and-wattle walls, small doorway facing the water.
+Low-poly, game-ready, matches a riverside village hub kit.
+
+
+10. Canoe
+------------
+Low-poly game prop, a simple hand-carved wooden dugout canoe, weathered
+and slightly worn, a single wooden paddle resting inside. Game-ready,
+clean topology.
+
+
+11. Riverside_Dock
+---------------------
+Low-poly game prop, a simple wooden plank dock jutting into water,
+weathered posts, slightly uneven boards. Game-ready, clean topology,
+designed to sit at a hub/expedition boundary.
+
+
+12. Shrine_To_Olokun
+------------------------
+Low-poly game prop, a small shrine to a Yoruba water deity — a low
+circular stone or clay platform holding cowrie shells, a carved
+wooden figure, and a shallow bowl of water. Game-ready, no flame
+geometry needed (any glow handled via a point light in Unity, same as
+ogbojuode-3d's bonfire).
+
+
+13. Coral_Reef  (x20 instances in the undersea kingdom)
+------------------------------------------------------------
+A single cluster of vividly colored coral formation, branching and
+irregular, deep-sea dark-fantasy palette (magenta, teal, deep orange).
+Low-poly game asset optimized for repeated instancing across a seabed,
+game-ready, clean topology.
+
+
+14. Glowing_Plankton  (x15 instances, undersea kingdom)
+------------------------------------------------------------
+A small cluster of bioluminescent floating plankton/jellyfish-like
+motes, soft glowing blue-white light. Stylized dark-fantasy prop,
+low-poly, game-ready, optimized for scattering through open water.
+
+
+15. Reed_Barrier  (x10 instances, hub/kingdom boundary)
+------------------------------------------------------------
+A cluster of tall river reeds bound loosely together as a simple
+boundary marker, weathered green-brown, slightly leaning. Low-poly
+game prop, designed for repeated instancing along a shoreline.
+
+
+SKIP — DO NOT GENERATE ON MESHY
+==================================
+Seabed_Floor / Village_Ground
+  -> Terrain, not a discrete mesh. Use Unity Terrain tool + tiling
+     ground/sand texture instead.
+
+Thrown spear projectile in flight
+  -> Too small/fast to read as a detailed mesh in motion once thrown.
+     Use a plain capsule or sphere + particle trail instead — same
+     reasoning as ogbojuode-3d's musket bullet.
+
+Spear_Launch_Point
+  -> Empty anchor Transform in code, not a visible object.
+
+
+NOTES
+======
+- Free tier: prioritize items 1-6 (character/creature cast) first, since
+  those are highest-risk for needing a re-prompt; batch items 13-15
+  (coral, plankton, reeds) together as a low-detail "cheap win" pass.
+- Items 7-12 (spear, blade, hut, canoe, dock, shrine) are close enough to
+  generic library props that Kenney/Poly Haven CC0 kits are worth trying
+  FIRST before spending Tripo credits — see ogbojuode-3d's prop-sourcing
+  precedent (Nature Kit, Survival Kit, Fantasy Town Kit all have usable
+  stand-ins for huts/docks/props). Only fall back to a custom Tripo
+  generation if the generic result doesn't read as "Yoruba riverside"
+  after texturing.
+- Export format: FBX or GLB, both import cleanly into Unity.
+- Items marked [RIGGED] should use Meshy/Tripo's auto-rig feature after
+  generation (T-pose export required for this to work).
+- On import, rescale so Warrior_Fish_Eja_Jagunjagun reads as noticeably
+  larger than Ireke Onibudo, matching the (2.5, 3.5, 4) scale already set
+  in SceneSetupWizard.cs.
+- Copyright/licensing note carried over from ogbojuode-3d: AI-generated
+  3D asset ownership and licensing terms are still unsettled. Treat
+  everything produced from this list as prototype-grade until revisited
+  on a paid/commercial-clear tier or replaced with custom/CC0 work before
+  anything ships.
