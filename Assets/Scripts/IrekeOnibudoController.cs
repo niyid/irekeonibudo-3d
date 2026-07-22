@@ -20,6 +20,7 @@ public class IrekeOnibudoController : MonoBehaviour
     public GameObject spearPrefab;
     public float spearThrowRate = 1.2f;
     public float spearSpeed = 25f;
+    public int spearDamage = 20;
     private float nextThrowTime = 0f;
 
     [Header("Egbe Spell (Teleport)")]
@@ -109,6 +110,14 @@ public class IrekeOnibudoController : MonoBehaviour
             GameObject spear = Instantiate(spearPrefab, spearLaunchPoint.position, spearLaunchPoint.rotation);
             Rigidbody rb = spear.GetComponent<Rigidbody>();
             if (rb != null) rb.linearVelocity = spearLaunchPoint.forward * spearSpeed;
+
+            ThrownSpear spearLogic = spear.GetComponent<ThrownSpear>();
+            if (spearLogic != null)
+            {
+                spearLogic.damage = spearDamage;
+                spearLogic.thrower = gameObject;
+            }
+
             Destroy(spear, 3f);
         }
     }

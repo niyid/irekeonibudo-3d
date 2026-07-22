@@ -35,14 +35,14 @@ public class MobileTouchUI : MonoBehaviour
 {
     public IrekeOnibudoController hunter;
     public MobileJoystick joystick;
-    public Button macheteButton;
-    public Button musketButton;
+    public Button bladeButton;
+    public Button spearButton;
     public Button egbeButton;
 
     void Start()
     {
-        if (macheteButton != null) macheteButton.onClick.AddListener(() => hunter.TriggerBladeAttackButton());
-        if (musketButton != null) musketButton.onClick.AddListener(() => hunter.ThrowSpear());
+        if (bladeButton != null) bladeButton.onClick.AddListener(() => hunter.TriggerBladeAttackButton());
+        if (spearButton != null) spearButton.onClick.AddListener(() => hunter.ThrowSpear());
         if (egbeButton != null) egbeButton.onClick.AddListener(() => hunter.CastEgbe());
     }
 

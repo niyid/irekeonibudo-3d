@@ -24,11 +24,18 @@ public class PlayerVitals : MonoBehaviour, IDamageable
         currentHealth = maxHealth;
     }
 
+    private bool isDefeated = false;
+
     public void TakeDamage(int amount)
     {
+        if (isDefeated) return;
+
         currentHealth = Mathf.Max(0, currentHealth - amount);
         if (currentHealth == 0)
+        {
+            isDefeated = true;
             HandleDefeat();
+        }
     }
 
     public void Heal(int amount)
@@ -45,5 +52,13 @@ public class PlayerVitals : MonoBehaviour, IDamageable
     {
         Debug.Log("The traveler has fallen. Returning to the hub village.");
         // Hook your respawn-at-hub / game-over flow here.
+    }
+
+    // Call this once your respawn-at-hub flow repositions the player, so
+    // TakeDamage stops ignoring hits and the traveler can be hurt again.
+    public void Respawn()
+    {
+        currentHealth = maxHealth;
+        isDefeated = false;
     }
 }

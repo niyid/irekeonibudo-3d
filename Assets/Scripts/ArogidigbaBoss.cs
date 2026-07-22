@@ -16,6 +16,8 @@ public class ArogidigbaBoss : MonoBehaviour, IDamageable
     private int currentHealth;
     private Transform player;
     private bool trialFailed = false;
+    private float nextContactHitTime;
+    private const float contactHitCooldown = 1.0f;
 
     void Start()
     {
@@ -29,8 +31,9 @@ public class ArogidigbaBoss : MonoBehaviour, IDamageable
         if (player == null || !trialFailed) return;
 
         float dist = Vector3.Distance(transform.position, player.position);
-        if (dist <= 2.5f)
+        if (dist <= 2.5f && Time.time >= nextContactHitTime)
         {
+            nextContactHitTime = Time.time + contactHitCooldown;
             IDamageable target = player.GetComponent<IDamageable>();
             if (target != null) target.TakeDamage(contactDamage);
         }

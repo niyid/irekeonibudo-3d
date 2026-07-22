@@ -128,6 +128,10 @@ public static class SceneSetupWizard
             col.height = 1.2f;
         }
 
+        // The Rigidbody + trigger Collider above only detect contact; without
+        // this component the spear flew through enemies with no effect.
+        instance.AddComponent<ThrownSpear>();
+
         GameObject prefab = PrefabUtility.SaveAsPrefabAsset(instance, SpearPrefabPath);
         Object.DestroyImmediate(instance);
         return prefab;
