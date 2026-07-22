@@ -9,11 +9,10 @@ using UnityEditor;
 // actual trials instead of Ogboju Ode's, and Arogidigba (mermaid queen) as
 // the riddle-boss instead of the Ostrich-King.
 //
-// Builds entirely from primitives for now — no models imported yet. See
-// irekeonibudo-meshy_prompts.txt for the asset list to generate before
-// swapping these placeholders out, following the same
-// load-real-asset-with-fallback pattern used in ogbojuode-3d once assets
-// exist.
+// Loads real FBX models from Assets/Models/ where they've been imported
+// (see irekeonibudo-meshy_prompts.txt for the full asset list), falling
+// back to primitives for anything not yet generated — the same
+// load-real-asset-with-fallback pattern used in ogbojuode-3d.
 public static class SceneSetupWizard
 {
     [MenuItem("Ireke Onibudo/Build Entire Universe")]
@@ -54,6 +53,70 @@ public static class SceneSetupWizard
         tagsProp.InsertArrayElementAtIndex(tagsProp.arraySize);
         tagsProp.GetArrayElementAtIndex(tagsProp.arraySize - 1).stringValue = tag;
         tagManager.ApplyModifiedProperties();
+    }
+
+    // Returns the first imported model (FBX/etc.) found under folderPath, or
+    // null if that folder doesn't exist or has no model yet.
+    private static GameObject LoadModelInFolder(string folderPath)
+    {
+        if (!AssetDatabase.IsValidFolder(folderPath)) return null;
+        string[] guids = AssetDatabase.FindAssets("t:Model", new[] { folderPath });
+        if (guids.Length == 0) return null;
+        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+        return AssetDatabase.LoadAssetAtPath<GameObject>(path);
+    }
+
+    // Instantiates the real model at folderPath if one has been imported;
+    // otherwise builds a colored primitive placeholder of fallbackType. Real
+    // models are left with their own materials untouched; only the
+    // primitive fallback gets fallbackColor applied.
+    private static GameObject InstantiateModelOrFallback(string folderPath, PrimitiveType fallbackType, Color fallbackColor)
+    {
+        GameObject modelAsset = LoadModelInFolder(folderPath);
+        if (modelAsset != null)
+            return (GameObject)PrefabUtility.InstantiatePrefab(modelAsset);
+
+        GameObject placeholder = GameObject.CreatePrimitive(fallbackType);
+        SetColor(placeholder, fallbackColor);
+        return placeholder;
+    }
+
+    private const string SpearPrefabPath = "Assets/Prefabs/ThrownSpear.prefab";
+
+    // Raw imported FBX models have no physics components, so
+    // IrekeOnibudoController.ThrowSpear()'s `rb.linearVelocity = ...` would
+    // silently no-op against the bare model. This builds a proper thrown
+    // prefab once (Rigidbody, gravity off so it flies straight; a small
+    // trigger Collider so it doesn't get stopped by scenery) and reuses the
+    // saved prefab asset on every subsequent run instead of rebuilding it.
+    private static GameObject EnsureSpearPrefab()
+    {
+        GameObject existing = AssetDatabase.LoadAssetAtPath<GameObject>(SpearPrefabPath);
+        if (existing != null) return existing;
+
+        GameObject spearModel = LoadModelInFolder("Assets/Models/Props/Spear_Oko_Eja");
+        if (spearModel == null) return null;
+
+        if (!AssetDatabase.IsValidFolder("Assets/Prefabs"))
+            AssetDatabase.CreateFolder("Assets", "Prefabs");
+
+        GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(spearModel);
+        instance.name = "ThrownSpear";
+
+        Rigidbody rb = instance.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+
+        if (instance.GetComponentInChildren<Collider>() == null)
+        {
+            CapsuleCollider col = instance.AddComponent<CapsuleCollider>();
+            col.isTrigger = true;
+            col.radius = 0.1f;
+            col.height = 1.2f;
+        }
+
+        GameObject prefab = PrefabUtility.SaveAsPrefabAsset(instance, SpearPrefabPath);
+        Object.DestroyImmediate(instance);
+        return prefab;
     }
 
     // --- Undersea kingdom (Ijoba Omi): the dangerous expanse, standing in
@@ -175,21 +238,39 @@ public static class SceneSetupWizard
 
     private static GameObject BuildPlayer(Transform parent)
     {
-        GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-        player.name = "Player_Ireke_Onibudo";
+        // Root carries the tag/controller/collider regardless of whether a
+        // real model or a primitive ends up as the visual, so
+        // IrekeOnibudoController and CreatureAI raycasts keep working
+        // either way.
+        GameObject player = new GameObject("Player_Ireke_Onibudo");
         player.tag = "Player";
         player.transform.parent = parent;
         player.transform.position = new Vector3(0f, 1f, -10f);
-        Object.DestroyImmediate(player.GetComponent<CapsuleCollider>());
         player.AddComponent<CharacterController>();
         player.AddComponent<PlayerVitals>();
         IrekeOnibudoController controller = player.AddComponent<IrekeOnibudoController>();
-        SetColor(player, new Color(0.5f, 0.3f, 0.15f));
+
+        GameObject visual = InstantiateModelOrFallback(
+            "Assets/Models/Characters/Player_Ireke_Onibudo",
+            PrimitiveType.Capsule, new Color(0.5f, 0.3f, 0.15f));
+        visual.name = "Player_Visual";
+        visual.transform.parent = player.transform;
+        visual.transform.localPosition = Vector3.zero;
+        // Movement collision is handled by CharacterController on the root;
+        // strip any collider that came with the visual (primitive fallback
+        // has one, imported FBX models normally don't).
+        Collider visualCollider = visual.GetComponent<Collider>();
+        if (visualCollider != null) Object.DestroyImmediate(visualCollider);
 
         GameObject launchPoint = new GameObject("Spear_Launch_Point");
         launchPoint.transform.parent = player.transform;
         launchPoint.transform.localPosition = new Vector3(0f, 0.5f, 0.8f);
         controller.spearLaunchPoint = launchPoint.transform;
+
+        // Thrown-spear prefab: built once with Rigidbody + Collider by
+        // EnsureSpearPrefab(), then reused on every subsequent wizard run.
+        GameObject spearPrefab = EnsureSpearPrefab();
+        if (spearPrefab != null) controller.spearPrefab = spearPrefab;
 
         return player;
     }
@@ -201,25 +282,33 @@ public static class SceneSetupWizard
     private static void BuildCreatures(Transform parent)
     {
         SpawnCreature(parent, CreatureAI.CreatureType.Swift, "Flying_Snake_Ejo_Fifo",
+            "Assets/Models/Characters/Flying_Snake_Ejo_Fifo",
             new Vector3(-8f, 3f, 30f), new Color(0.3f, 0.7f, 0.3f), new Vector3(2.5f, 1f, 1f));
         SpawnCreature(parent, CreatureAI.CreatureType.Brute, "Wrestler_Cat_Ologbo_Ijakadi",
+            "Assets/Models/Characters/Wrestler_Cat_Ologbo_Ijakadi",
             new Vector3(10f, 0f, 50f), new Color(0.5f, 0.4f, 0.1f), new Vector3(2.5f, 2.5f, 2.5f));
         SpawnCreature(parent, CreatureAI.CreatureType.Titan, "Warrior_Fish_Eja_Jagunjagun",
+            "Assets/Models/Characters/Warrior_Fish_Eja_Jagunjagun",
             new Vector3(0f, 0f, 68f), new Color(0.1f, 0.3f, 0.5f), new Vector3(2.5f, 3.5f, 4f));
     }
 
     private static void SpawnCreature(Transform parent, CreatureAI.CreatureType statPreset, string displayName,
-        Vector3 position, Color color, Vector3 scale)
+        string modelFolderPath, Vector3 position, Color color, Vector3 scale)
     {
-        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        GameObject go = InstantiateModelOrFallback(modelFolderPath, PrimitiveType.Cube, color);
         go.name = displayName;
         go.tag = "Enemy";
         go.transform.parent = parent;
         go.transform.position = position;
-        go.transform.localScale = scale;
+        go.transform.localScale = scale; // eyeball-check against real model proportions in Editor
+
+        // CreatureAI's contact-damage check relies on the player hitting a
+        // collider; the primitive fallback has one built in, but imported
+        // FBX models normally don't, so add one when it's missing.
+        if (go.GetComponent<Collider>() == null) go.AddComponent<BoxCollider>();
+
         CreatureAI ai = go.AddComponent<CreatureAI>();
         CreatureAI.ApplyPreset(ai, statPreset); // reuses ogbojuode's stat presets by role (fast/slow/tank)
-        SetColor(go, color);
     }
 
     // Arogidigba: deepest in the undersea kingdom, past all three creatures.
@@ -229,19 +318,32 @@ public static class SceneSetupWizard
         queen.transform.parent = parent;
         queen.transform.position = new Vector3(0f, 0f, 85f);
 
-        GameObject upperBody = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-        upperBody.name = "Arogidigba_UpperBody_Human";
-        upperBody.transform.parent = queen.transform;
-        upperBody.transform.localPosition = new Vector3(0f, 1.5f, 0f);
-        upperBody.transform.localScale = new Vector3(1.2f, 1.3f, 1.2f);
-        SetColor(upperBody, new Color(0.7f, 0.5f, 0.6f));
+        GameObject model = LoadModelInFolder("Assets/Models/Characters/Arogidigba_Mermaid_Queen");
+        if (model != null)
+        {
+            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(model);
+            instance.name = "Arogidigba_Model";
+            instance.transform.parent = queen.transform;
+            instance.transform.localPosition = Vector3.zero;
+        }
+        else
+        {
+            // Two-part primitive placeholder, kept as a fallback until/unless
+            // the mermaid queen model is unavailable.
+            GameObject upperBody = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            upperBody.name = "Arogidigba_UpperBody_Human";
+            upperBody.transform.parent = queen.transform;
+            upperBody.transform.localPosition = new Vector3(0f, 1.5f, 0f);
+            upperBody.transform.localScale = new Vector3(1.2f, 1.3f, 1.2f);
+            SetColor(upperBody, new Color(0.7f, 0.5f, 0.6f));
 
-        GameObject tail = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        tail.name = "Arogidigba_LowerBody_FishTail";
-        tail.transform.parent = queen.transform;
-        tail.transform.localPosition = new Vector3(0f, 0.2f, 0f);
-        tail.transform.localScale = new Vector3(0.8f, 1.5f, 0.8f);
-        SetColor(tail, new Color(0.2f, 0.5f, 0.6f));
+            GameObject tail = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            tail.name = "Arogidigba_LowerBody_FishTail";
+            tail.transform.parent = queen.transform;
+            tail.transform.localPosition = new Vector3(0f, 0.2f, 0f);
+            tail.transform.localScale = new Vector3(0.8f, 1.5f, 0.8f);
+            SetColor(tail, new Color(0.2f, 0.5f, 0.6f));
+        }
 
         queen.AddComponent<ArogidigbaBoss>();
         RiddleGiver riddle = queen.AddComponent<RiddleGiver>();
@@ -263,12 +365,13 @@ public static class SceneSetupWizard
 
         for (int i = 0; i < positions.Length; i++)
         {
-            GameObject guide = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            GameObject guide = InstantiateModelOrFallback(
+                "Assets/Models/Characters/Mother_Spirit_Guide_Iya_Ireke",
+                PrimitiveType.Sphere, new Color(0.85f, 0.85f, 1f));
             guide.name = "Mother_Spirit_Guide_" + i;
             guide.transform.parent = parent;
             guide.transform.position = positions[i];
             guide.transform.localScale = Vector3.one * 0.8f;
-            SetColor(guide, new Color(0.85f, 0.85f, 1f));
 
             guide.AddComponent<MotherSpiritGuide>();
             RiddleGiver riddle = guide.AddComponent<RiddleGiver>();
