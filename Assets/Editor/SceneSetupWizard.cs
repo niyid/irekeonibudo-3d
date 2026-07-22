@@ -81,6 +81,20 @@ public static class SceneSetupWizard
         return placeholder;
     }
 
+    // Props (Kenney kit pieces) live directly under Assets/Models/Props/ as
+    // single files, unlike characters which get their own subfolder — so
+    // this loads by exact filename rather than searching a folder.
+    private static GameObject LoadPropModel(string fileName)
+    {
+        return AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Models/Props/" + fileName);
+    }
+
+    private static GameObject InstantiatePropModel(string fileName)
+    {
+        GameObject asset = LoadPropModel(fileName);
+        return asset != null ? (GameObject)PrefabUtility.InstantiatePrefab(asset) : null;
+    }
+
     private const string SpearPrefabPath = "Assets/Prefabs/ThrownSpear.prefab";
 
     // Raw imported FBX models have no physics components, so
@@ -121,7 +135,9 @@ public static class SceneSetupWizard
 
     // --- Undersea kingdom (Ijoba Omi): the dangerous expanse, standing in
     // for the forest — reef instead of trees, glowing plankton instead of
-    // spirit fungus. ---
+    // spirit fungus. Stays primitive-only: the imported Kenney props are
+    // all land assets (fantasy-town/nature/survival kits), so there's
+    // nothing appropriate here yet to swap the reef/plankton for. ---
     private static void BuildUnderseaKingdom(Transform parent)
     {
         GameObject kingdom = new GameObject("Ijoba_Omi_Undersea_Kingdom");
@@ -173,27 +189,14 @@ public static class SceneSetupWizard
 
         Vector3[] hutPositions =
         {
-            new Vector3(-10f, 1.5f, -5f),
-            new Vector3(10f, 1.5f, -5f),
-            new Vector3(-10f, 1.5f, 8f),
-            new Vector3(10f, 1.5f, 8f),
+            new Vector3(-10f, 0f, -5f),
+            new Vector3(10f, 0f, -5f),
+            new Vector3(-10f, 0f, 8f),
+            new Vector3(10f, 0f, 8f),
         };
         foreach (Vector3 pos in hutPositions)
         {
-            GameObject hut = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            hut.name = "Riverside_Hut";
-            hut.transform.parent = hub.transform;
-            hut.transform.position = pos;
-            hut.transform.localScale = new Vector3(2.5f, 1.5f, 2.5f);
-            SetColor(hut, new Color(0.6f, 0.4f, 0.2f));
-
-            GameObject roof = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            roof.name = "Thatched_Roof";
-            roof.transform.parent = hut.transform;
-            roof.transform.localPosition = new Vector3(0f, 1.3f, 0f);
-            roof.transform.localScale = new Vector3(0.6f, 0.4f, 0.6f);
-            roof.transform.localRotation = Quaternion.Euler(0f, 45f, 0f);
-            SetColor(roof, new Color(0.4f, 0.3f, 0.1f));
+            BuildHut(hub.transform, pos);
         }
 
         GameObject dock = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -202,6 +205,25 @@ public static class SceneSetupWizard
         dock.transform.position = new Vector3(0f, 0.3f, 14f);
         dock.transform.localScale = new Vector3(4f, 0.3f, 6f);
         SetColor(dock, new Color(0.35f, 0.25f, 0.15f));
+
+        // No plank/piling asset was imported for the dock deck itself, so it
+        // stays primitive; pillar-wood posts underneath it are real, though.
+        GameObject dockPillarAsset = LoadPropModel("pillar-wood.fbx");
+        if (dockPillarAsset != null)
+        {
+            Vector3[] postOffsets =
+            {
+                new Vector3(-1.5f, -0.6f, 12f), new Vector3(1.5f, -0.6f, 12f),
+                new Vector3(-1.5f, -0.6f, 16f), new Vector3(1.5f, -0.6f, 16f),
+            };
+            foreach (Vector3 offset in postOffsets)
+            {
+                GameObject post = (GameObject)PrefabUtility.InstantiatePrefab(dockPillarAsset);
+                post.name = "Dock_Support_Post";
+                post.transform.parent = hub.transform;
+                post.transform.position = offset;
+            }
+        }
 
         GameObject canoe = GameObject.CreatePrimitive(PrimitiveType.Capsule);
         canoe.name = "Canoe";
@@ -224,15 +246,150 @@ public static class SceneSetupWizard
         shrineLight.range = 15f;
         shrineLight.intensity = 1.5f;
 
+        // Real campfire beside the shrine (extra gathering-point detail;
+        // doesn't replace the shrine, just dresses the area around it).
+        GameObject campfire = InstantiatePropModel("campfire-pit.fbx");
+        if (campfire != null)
+        {
+            campfire.name = "Campfire_Near_Shrine";
+            campfire.transform.parent = hub.transform;
+            campfire.transform.position = new Vector3(2.5f, 0f, 0f);
+        }
+
+        // Reed barrier at the water's edge — real fortified-fence pieces
+        // where available, falling back to the thin cylinder posts.
+        GameObject fenceAsset = LoadPropModel("fence-fortified.fbx");
         for (int i = 0; i < 10; i++)
         {
-            GameObject reed = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            reed.name = "Reed_Barrier_" + i;
-            reed.transform.parent = hub.transform;
             float x = Mathf.Lerp(-20f, 20f, i / 9f);
-            reed.transform.position = new Vector3(x, 0.6f, 12f);
-            reed.transform.localScale = new Vector3(0.1f, 0.6f, 0.1f);
-            SetColor(reed, new Color(0.5f, 0.55f, 0.2f));
+
+            if (fenceAsset != null)
+            {
+                GameObject fence = (GameObject)PrefabUtility.InstantiatePrefab(fenceAsset);
+                fence.name = "Reed_Barrier_" + i;
+                fence.transform.parent = hub.transform;
+                fence.transform.position = new Vector3(x, 0f, 12f);
+            }
+            else
+            {
+                GameObject reed = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                reed.name = "Reed_Barrier_" + i;
+                reed.transform.parent = hub.transform;
+                reed.transform.position = new Vector3(x, 0.6f, 12f);
+                reed.transform.localScale = new Vector3(0.1f, 0.6f, 0.1f);
+                SetColor(reed, new Color(0.5f, 0.55f, 0.2f));
+            }
+        }
+
+        BuildVillageFringe(hub.transform);
+    }
+
+    // Real tree_oak_dark / mushroom_redGroup props scattered around the
+    // village's edge for atmosphere; skipped entirely if the assets aren't
+    // imported (no primitive fallback — this decoration is purely additive).
+    private static void BuildVillageFringe(Transform hubTransform)
+    {
+        GameObject treeAsset = LoadPropModel("tree_oak_dark.fbx");
+        if (treeAsset != null)
+        {
+            Vector3[] treePositions =
+            {
+                new Vector3(-16f, 0f, -8f), new Vector3(16f, 0f, -8f),
+                new Vector3(-18f, 0f, 5f), new Vector3(18f, 0f, 5f),
+            };
+            foreach (Vector3 pos in treePositions)
+            {
+                GameObject tree = (GameObject)PrefabUtility.InstantiatePrefab(treeAsset);
+                tree.name = "Village_Fringe_Tree";
+                tree.transform.parent = hubTransform;
+                tree.transform.position = pos;
+            }
+        }
+
+        GameObject mushroomAsset = LoadPropModel("mushroom_redGroup.fbx");
+        if (mushroomAsset != null)
+        {
+            Vector3[] mushroomPositions = { new Vector3(-14f, 0f, -6f), new Vector3(14f, 0f, -6f) };
+            foreach (Vector3 pos in mushroomPositions)
+            {
+                GameObject mushroom = (GameObject)PrefabUtility.InstantiatePrefab(mushroomAsset);
+                mushroom.name = "Village_Fringe_Mushroom";
+                mushroom.transform.parent = hubTransform;
+                mushroom.transform.position = pos;
+            }
+        }
+    }
+
+    // Builds one hut from real Kenney pieces (four wall-wood walls, a
+    // roof-high-point roof, pillar-wood corner posts) when they're
+    // available; falls back to the original cylinder-body/cube-roof
+    // primitive hut otherwise. Either way the hut gets a BoxCollider so it
+    // still blocks movement/raycasts the way the old primitive body did.
+    private static void BuildHut(Transform hubTransform, Vector3 position)
+    {
+        GameObject hut = new GameObject("Riverside_Hut");
+        hut.transform.parent = hubTransform;
+        hut.transform.position = position;
+
+        GameObject wallAsset = LoadPropModel("wall-wood.fbx");
+        GameObject roofAsset = LoadPropModel("roof-high-point.fbx");
+        GameObject pillarAsset = LoadPropModel("pillar-wood.fbx");
+
+        if (wallAsset != null && roofAsset != null)
+        {
+            const float half = 1.25f;
+            Vector3[] wallOffsets = { new Vector3(0f, 0f, half), new Vector3(0f, 0f, -half), new Vector3(half, 0f, 0f), new Vector3(-half, 0f, 0f) };
+            float[] wallYRotations = { 0f, 180f, 90f, 270f };
+            for (int i = 0; i < 4; i++)
+            {
+                GameObject wall = (GameObject)PrefabUtility.InstantiatePrefab(wallAsset);
+                wall.name = "Hut_Wall";
+                wall.transform.parent = hut.transform;
+                wall.transform.localPosition = wallOffsets[i];
+                wall.transform.localRotation = Quaternion.Euler(0f, wallYRotations[i], 0f);
+            }
+
+            GameObject roof = (GameObject)PrefabUtility.InstantiatePrefab(roofAsset);
+            roof.name = "Hut_Roof";
+            roof.transform.parent = hut.transform;
+            roof.transform.localPosition = new Vector3(0f, 2f, 0f);
+
+            if (pillarAsset != null)
+            {
+                Vector3[] cornerOffsets =
+                {
+                    new Vector3(half, 0f, half), new Vector3(-half, 0f, half),
+                    new Vector3(half, 0f, -half), new Vector3(-half, 0f, -half),
+                };
+                foreach (Vector3 corner in cornerOffsets)
+                {
+                    GameObject post = (GameObject)PrefabUtility.InstantiatePrefab(pillarAsset);
+                    post.name = "Hut_Corner_Post";
+                    post.transform.parent = hut.transform;
+                    post.transform.localPosition = corner;
+                }
+            }
+
+            BoxCollider col = hut.AddComponent<BoxCollider>();
+            col.center = new Vector3(0f, 1f, 0f);
+            col.size = new Vector3(half * 2f, 2f, half * 2f);
+        }
+        else
+        {
+            GameObject hutBody = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            hutBody.name = "Riverside_Hut_Body";
+            hutBody.transform.parent = hut.transform;
+            hutBody.transform.localPosition = new Vector3(0f, 1.5f, 0f);
+            hutBody.transform.localScale = new Vector3(2.5f, 1.5f, 2.5f);
+            SetColor(hutBody, new Color(0.6f, 0.4f, 0.2f));
+
+            GameObject roof = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            roof.name = "Thatched_Roof";
+            roof.transform.parent = hutBody.transform;
+            roof.transform.localPosition = new Vector3(0f, 1.3f, 0f);
+            roof.transform.localScale = new Vector3(0.6f, 0.4f, 0.6f);
+            roof.transform.localRotation = Quaternion.Euler(0f, 45f, 0f);
+            SetColor(roof, new Color(0.4f, 0.3f, 0.1f));
         }
     }
 
@@ -271,6 +428,17 @@ public static class SceneSetupWizard
         // EnsureSpearPrefab(), then reused on every subsequent wizard run.
         GameObject spearPrefab = EnsureSpearPrefab();
         if (spearPrefab != null) controller.spearPrefab = spearPrefab;
+
+        // Visual-only Idà (blade) held at hip height. SwingBlade() in
+        // IrekeOnibudoController does a raycast, not a physical hit off this
+        // object, so this is purely cosmetic — skipped if not imported.
+        GameObject bladeAsset = InstantiatePropModel("blade.fbx");
+        if (bladeAsset != null)
+        {
+            bladeAsset.name = "Ida_Blade_Visual";
+            bladeAsset.transform.parent = player.transform;
+            bladeAsset.transform.localPosition = new Vector3(0.4f, 0.9f, 0.2f);
+        }
 
         return player;
     }
