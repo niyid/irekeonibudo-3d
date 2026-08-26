@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -451,8 +452,15 @@ public static class SceneSetupWizard
     // the flying snake that seizes a princess, the violent Wrestler-Cat
     // from the story-within-a-story, and a warrior-fish guard of
     // Arogidigba's undersea kingdom.
+    // Populated by BuildCreatures, read by BuildMotherSpiritGuides so
+    // procedurally placed spirits keep their distance from wherever the
+    // creatures spawned this run.
+    private static readonly List<Vector3> creatureSpawnPositions = new List<Vector3>();
+
     private static void BuildCreatures(Transform parent)
     {
+        creatureSpawnPositions.Clear();
+
         SpawnCreature(parent, CreatureAI.CreatureType.Swift, "Flying_Snake_Ejo_Fifo",
             "Assets/Models/Characters/Flying_Snake_Ejo_Fifo",
             new Vector3(-8f, 3f, 30f), new Color(0.3f, 0.7f, 0.3f), new Vector3(2.5f, 1f, 1f));
@@ -471,8 +479,13 @@ public static class SceneSetupWizard
         go.name = displayName;
         go.tag = "Enemy";
         go.transform.parent = parent;
-        go.transform.position = position;
+        // Small per-playthrough jitter around the authored staging position
+        // (creature order/role stays fixed; the exact spot within ~4 units
+        // doesn't).
+        Vector3 jittered = ProceduralSpiritPlacer.JitterPosition(position, 4f, "creature_pos_" + displayName);
+        go.transform.position = jittered;
         go.transform.localScale = scale; // eyeball-check against real model proportions in Editor
+        creatureSpawnPositions.Add(jittered);
 
         // CreatureAI's contact-damage check relies on the player hitting a
         // collider; the primitive fallback has one built in, but imported
@@ -481,6 +494,9 @@ public static class SceneSetupWizard
 
         CreatureAI ai = go.AddComponent<CreatureAI>();
         CreatureAI.ApplyPreset(ai, statPreset); // reuses ogbojuode's stat presets by role (fast/slow/tank)
+        // Nudges the just-applied preset by +/-15% per playthrough (seeded
+        // off RunSeed) so the same creature type isn't identical every run.
+        CreatureStatRoller.RollVariance(ai);
     }
 
     // Arogidigba: deepest in the undersea kingdom, past all three creatures.
@@ -519,23 +535,33 @@ public static class SceneSetupWizard
 
         queen.AddComponent<ArogidigbaBoss>();
         RiddleGiver riddle = queen.AddComponent<RiddleGiver>();
+        // Fixed fields stay as a fallback if the pool is ever empty/missing.
         riddle.riddleText = "I rule the water yet was never wet. What manner of thing am I?";
         riddle.correctAnswerHint = "a queen of two natures / Arogidigba herself";
         riddle.wisdomReward = 50;
+        riddle.riddlePool = GetOrCreateArogidigbaRiddlePool();
+        riddle.maxDifficulty = RiddlePool.Difficulty.Hard;
     }
 
     // Three wandering visitations of Ireke Onibudo's mother's spirit,
     // scattered through the undersea kingdom rather than guarding the path.
     private static void BuildMotherSpiritGuides(Transform parent)
     {
-        Vector3[] positions =
-        {
-            new Vector3(-15f, 1f, 22f),
-            new Vector3(18f, 1f, 40f),
-            new Vector3(-5f, 1f, 58f),
-        };
+        // Positions scatter procedurally within WorldBounds' spawn band
+        // (shared with ExpeditionManager, so the boundary line and the
+        // spirit-scatter area can't drift out of sync), staying clear of
+        // wherever the creatures spawned this run and of each other.
+        WorldBounds bounds = WorldBounds.IrekeOnibudoDefaults;
+        List<Vector3> positions = ProceduralSpiritPlacer.GeneratePositions(
+            count: 3,
+            minZ: bounds.minZ, maxZ: bounds.maxZ, minX: bounds.minX, maxX: bounds.maxX,
+            avoidPoints: creatureSpawnPositions, minClearance: 8f,
+            seedStream: "mother_spirit_placement");
 
-        for (int i = 0; i < positions.Length; i++)
+        RiddlePool pool = GetOrCreateMotherSpiritRiddlePool();
+        DialogueTree chatter = GetOrCreateMotherSpiritChatter();
+
+        for (int i = 0; i < positions.Count; i++)
         {
             GameObject guide = InstantiateModelOrFallback(
                 "Assets/Models/Characters/Mother_Spirit_Guide_Iya_Ireke",
@@ -550,7 +576,116 @@ public static class SceneSetupWizard
             riddle.riddleText = "What follows you even into the deepest water, unseen?";
             riddle.correctAnswerHint = "a mother's love / memory";
             riddle.wisdomReward = 10;
+            riddle.riddlePool = pool;
+            riddle.maxDifficulty = RiddlePool.Difficulty.Medium;
+
+            DialogueSpeaker speaker = guide.AddComponent<DialogueSpeaker>();
+            speaker.tree = chatter;
         }
+    }
+
+    // --- Procedural content assets ---------------------------------------
+    // Created once under Assets/Data/ and reused on subsequent builds rather
+    // than regenerated every time, so hand-edits made in the Inspector
+    // (adding more riddles, tweaking weights) survive re-running the wizard.
+
+    private const string DataFolder = "Assets/Data";
+
+    private static RiddlePool GetOrCreateArogidigbaRiddlePool()
+    {
+        string path = DataFolder + "/ArogidigbaRiddlePool.asset";
+        RiddlePool pool = AssetDatabase.LoadAssetAtPath<RiddlePool>(path);
+        if (pool != null) return pool;
+
+        pool = ScriptableObject.CreateInstance<RiddlePool>();
+        pool.riddles = new List<RiddlePool.RiddleEntry>
+        {
+            new RiddlePool.RiddleEntry {
+                riddleText = "I rule the water yet was never wet. What manner of thing am I?",
+                correctAnswerHint = "a queen of two natures / Arogidigba herself",
+                wisdomReward = 50, difficulty = RiddlePool.Difficulty.Medium, weight = 1f },
+            new RiddlePool.RiddleEntry {
+                riddleText = "My trials are not meant to be won, only endured. Why do I set them anyway?",
+                correctAnswerHint = "to see who endures / to test the heart, not the answer",
+                wisdomReward = 50, difficulty = RiddlePool.Difficulty.Hard, weight = 1f },
+            new RiddlePool.RiddleEntry {
+                riddleText = "The current carries everything down to me eventually. What have I never once kept?",
+                correctAnswerHint = "a promise / the light from above",
+                wisdomReward = 50, difficulty = RiddlePool.Difficulty.Hard, weight = 1f },
+            new RiddlePool.RiddleEntry {
+                riddleText = "A shipwrecked man fears drowning. What should he fear more, down here?",
+                correctAnswerHint = "forgetting the surface / losing his reason for returning",
+                wisdomReward = 50, difficulty = RiddlePool.Difficulty.Medium, weight = 1f },
+        };
+        EnsureFolder(DataFolder);
+        AssetDatabase.CreateAsset(pool, path);
+        AssetDatabase.SaveAssets();
+        return pool;
+    }
+
+    private static RiddlePool GetOrCreateMotherSpiritRiddlePool()
+    {
+        string path = DataFolder + "/MotherSpiritRiddlePool.asset";
+        RiddlePool pool = AssetDatabase.LoadAssetAtPath<RiddlePool>(path);
+        if (pool != null) return pool;
+
+        pool = ScriptableObject.CreateInstance<RiddlePool>();
+        pool.riddles = new List<RiddlePool.RiddleEntry>
+        {
+            new RiddlePool.RiddleEntry {
+                riddleText = "What follows you even into the deepest water, unseen?",
+                correctAnswerHint = "a mother's love / memory",
+                wisdomReward = 10, difficulty = RiddlePool.Difficulty.Easy, weight = 1f },
+            new RiddlePool.RiddleEntry {
+                riddleText = "I gave you your first name, though the sea has no need of names. Why remember it?",
+                correctAnswerHint = "so you remember who you were before the trials / so you find your way back",
+                wisdomReward = 12, difficulty = RiddlePool.Difficulty.Medium, weight = 0.8f },
+            new RiddlePool.RiddleEntry {
+                riddleText = "The plankton glows without asking to be seen. What else does that, in your life?",
+                correctAnswerHint = "a mother's care / quiet love",
+                wisdomReward = 10, difficulty = RiddlePool.Difficulty.Easy, weight = 1f },
+            new RiddlePool.RiddleEntry {
+                riddleText = "What does the sea return that the land never does?",
+                correctAnswerHint = "what was thought lost / the dead, in dreams",
+                wisdomReward = 12, difficulty = RiddlePool.Difficulty.Medium, weight = 0.8f },
+        };
+        EnsureFolder(DataFolder);
+        AssetDatabase.CreateAsset(pool, path);
+        AssetDatabase.SaveAssets();
+        return pool;
+    }
+
+    private static DialogueTree GetOrCreateMotherSpiritChatter()
+    {
+        string path = DataFolder + "/MotherSpiritChatter.asset";
+        DialogueTree tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(path);
+        if (tree != null) return tree;
+
+        tree = ScriptableObject.CreateInstance<DialogueTree>();
+        tree.lines = new List<DialogueTree.Line>
+        {
+            new DialogueTree.Line { id = "greet_a", text = "You've grown thinner since I last watched over you.",
+                weight = 1f, nextLineIds = new List<string>{ "followup_a", "followup_b" } },
+            new DialogueTree.Line { id = "greet_b", text = "Even down here, a mother knows her own child's footsteps.",
+                weight = 1f, nextLineIds = new List<string>{ "followup_a" } },
+            new DialogueTree.Line { id = "greet_c", text = "The queen's trials are not kind. I did not raise you to be unkind to yourself either.",
+                weight = 0.8f, nextLineIds = new List<string>{ "followup_b" } },
+            new DialogueTree.Line { id = "followup_a", text = "Answer what she asks truthfully, and she cannot hold it against you.",
+                weight = 1f, nextLineIds = new List<string>() },
+            new DialogueTree.Line { id = "followup_b", text = "Go on. I'll be here when the current brings you back.",
+                weight = 1f, nextLineIds = new List<string>() },
+        };
+        tree.openingLineIds = new List<string> { "greet_a", "greet_b", "greet_c" };
+        EnsureFolder(DataFolder);
+        AssetDatabase.CreateAsset(tree, path);
+        AssetDatabase.SaveAssets();
+        return tree;
+    }
+
+    private static void EnsureFolder(string path)
+    {
+        if (!AssetDatabase.IsValidFolder(path))
+            AssetDatabase.CreateFolder("Assets", "Data");
     }
 
     private static void BuildManagers(Transform parent, Transform playerTransform)
@@ -562,7 +697,7 @@ public static class SceneSetupWizard
 
         ExpeditionManager expedition = managers.AddComponent<ExpeditionManager>();
         expedition.player = playerTransform;
-        expedition.villageBoundaryZ = 12f; // matches the dock/reed-barrier line above
+        expedition.bounds = WorldBounds.IrekeOnibudoDefaults; // dock/reed-barrier line + spawn band
     }
 
     private static void BuildCameraAndLighting(Transform playerTransform)
