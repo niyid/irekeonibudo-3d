@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marked, Then Made: Both Kingdoms, Wired</title>
+
+<!-- SEO -->
+<meta name="description" content="Part VI, corrected a second time: the riddle pools, seeded stat variance, procedural spirit placement, dialogue trees, and codex persistence once marked as TODO-only are now built, wired into SceneSetupWizard, and pushed to main in both ogbojuode-3d and irekeonibudo-3d — nine byte-identical shared scripts, five rewritten files, one cross-project inconsistency found and resolved.">
+<meta name="author" content="niyid">
+<meta name="keywords" content="Yoruba literature, D.O. Fagunwa, procedural generation, Unity, C#, Android, weighted riddle pools, seeded RNG, Techducat">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Marked, Then Made: Both Kingdoms, Wired">
+<meta property="og:description" content="Part VI of the Fagunwa RPG series, corrected a second time — the systems once marked TODO-only are now built and pushed: riddle pools, wisdom-gated difficulty, seeded variance, procedural placement, dialogue trees, and cross-session codex persistence, in both kingdoms.">
+<meta property="og:url" content="https://niyid.github.io/ogbojuode-3d/fagunwa-rpgs-article-part6.html">
+<meta property="og:site_name" content="Techducat">
+<meta property="article:author" content="https://github.com/niyid">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Marked, Then Made: Both Kingdoms, Wired">
+<meta name="twitter:description" content="Part VI, corrected a second time. What was TODO-only markers is now built, wired, and pushed to main in both repos — verified against the actual commits, not a session summary.">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://niyid.github.io/ogbojuode-3d/fagunwa-rpgs-article-part6.html">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg:           #080907;
+    --surface:      #0d100c;
+    --panel:        #12160f;
+    --border:       #22271d;
+    --border-hi:    #3a4230;
+    --gold:         #d9a441;
+    --gold-dim:     rgba(217,164,65,0.14);
+    --sea:          #2f7a82;
+    --sea-dim:      rgba(47,122,130,0.14);
+    --forest:       #4a8f63;
+    --forest-dim:   rgba(74,143,99,0.14);
+    --red:          #b3402b;
+    --red-dim:      rgba(179,64,43,0.14);
+    --violet:       #8a76c9;
+    --text:         #e9e4d6;
+    --muted:        #7c8577;
+    --muted-hi:     #b3ae9c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(217,164,65,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(217,164,65,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 28px 96px;
+  }
+
+  .hero { padding: 80px 0 64px; border-bottom: 1px solid var(--border); margin-bottom: 64px; position: relative; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 28px;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
+
+  h1 {
+    font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 66px);
+    font-weight: 900; line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 28px;
+  }
+  h1 .accent { color: var(--gold); }
+  h1 .italic { font-style: italic; }
+  h1 .sea-accent { color: #6fb3ba; }
+  h1 .red-accent { color: #d97a63; }
+
+  .hero-meta {
+    display: flex; align-items: center; gap: 20px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 32px; flex-wrap: wrap;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta .sep { color: var(--border-hi); }
+
+  .hero-lead {
+    font-size: 18px; font-weight: 300; color: var(--muted-hi); line-height: 1.7; max-width: 680px;
+    border-left: 3px solid var(--gold); padding-left: 20px;
+  }
+
+  .ghost-hero { position: absolute; right: -10px; top: 30px; width: 190px; opacity: 0.08; pointer-events: none; }
+
+  section { margin-bottom: 72px; }
+
+  .section-kicker {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-kicker::after { content: ''; display: block; flex: 1; height: 1px; background: var(--border); }
+
+  h2 {
+    font-family: 'Playfair Display', serif; font-size: clamp(24px, 3.5vw, 36px); font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.015em; margin-bottom: 24px;
+  }
+  h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+
+  p { margin-bottom: 18px; color: var(--muted-hi); }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 500; }
+  a { color: var(--gold); }
+  code { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; background: var(--panel); padding: 2px 6px; border-radius: 4px; color: var(--muted-hi); border: 1px solid var(--border); }
+
+  .pull-quote {
+    background: var(--red-dim); border: 1px solid rgba(179,64,43,0.25); border-left: 4px solid var(--red);
+    border-radius: 0 8px 8px 0; padding: 24px 28px; margin: 32px 0;
+  }
+  .pull-quote p { font-family: 'Playfair Display', serif; font-style: italic; font-size: 18px; line-height: 1.6; color: var(--text); margin-bottom: 10px; }
+  .pull-quote cite { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: #d97a63; text-transform: uppercase; }
+
+  .item-list { display: flex; flex-direction: column; gap: 0; margin: 28px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .item-row { display: grid; grid-template-columns: 200px 1fr; gap: 18px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .item-row:last-child { border-bottom: none; }
+  .item-row:nth-child(odd) { background: rgba(255,255,255,0.012); }
+  .item-name { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--gold); letter-spacing: 0.03em; }
+  .item-desc { font-size: 13.5px; color: var(--muted-hi); line-height: 1.55; }
+  @media (max-width: 600px) { .item-row { grid-template-columns: 1fr; gap: 4px; } }
+
+  .code-block { background: #060705; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 28px 0; font-size: 13px; }
+  .code-header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .code-header span { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+  .code-header .lang { color: var(--gold); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .code-body { padding: 20px 20px; font-family: 'IBM Plex Mono', monospace; line-height: 1.7; overflow-x: auto; white-space: pre; font-size: 12.5px; }
+  .kw { color: #c792ea; } .fn { color: #82aaff; } .str { color: #c3e88d; } .num { color: #f78c6c; }
+  .cm { color: #5c6a55; font-style: italic; } .ty { color: #ffcb6b; } .prop { color: var(--gold); }
+
+  .compare-cards { display: flex; flex-direction: column; gap: 0; margin: 28px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .compare-header { display: grid; grid-template-columns: 170px 1fr 1fr; background: var(--panel); border-bottom: 2px solid var(--border-hi); }
+  .compare-header-cell { padding: 12px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+  .compare-header-cell:nth-child(1) { color: var(--muted); }
+  .compare-header-cell:nth-child(2) { color: #d97a63; border-left: 1px solid var(--border); }
+  .compare-header-cell:nth-child(3) { color: #7fc296; border-left: 1px solid var(--border); }
+  .compare-row { display: grid; grid-template-columns: 170px 1fr 1fr; border-bottom: 1px solid var(--border); }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row:hover { background: rgba(255,255,255,0.016); }
+  .compare-cell { padding: 14px 16px; font-size: 13.5px; line-height: 1.5; }
+  .compare-cell:nth-child(2), .compare-cell:nth-child(3) { border-left: 1px solid var(--border); }
+  .compare-cell.dim-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  @media (max-width: 580px) {
+    .compare-header { grid-template-columns: 1fr; }
+    .compare-header-cell:nth-child(1) { display: none; }
+    .compare-header-cell:nth-child(2), .compare-header-cell:nth-child(3) { border-left: none; border-top: 1px solid var(--border); }
+    .compare-row { grid-template-columns: 1fr; }
+    .compare-cell.dim-label { background: var(--panel); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 16px 4px; }
+    .compare-cell:nth-child(2), .compare-cell:nth-child(3) { border-left: none; padding-top: 6px; padding-bottom: 6px; }
+    .compare-cell:nth-child(3) { padding-bottom: 14px; }
+  }
+
+  .stat-strip { display: flex; flex-wrap: wrap; gap: 16px; margin: 28px 0; }
+  .stat-box { flex: 1; min-width: 140px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+  .callout { display: flex; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; margin: 28px 0; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; }
+  .callout-body strong { display: block; margin-bottom: 4px; font-size: 14px; }
+  .callout-body p { font-size: 13.5px; margin: 0; color: var(--muted-hi); }
+  .callout-good { border-left: 3px solid var(--forest); }
+  .callout-info { border-left: 3px solid var(--sea); }
+  .callout-warn { border-left: 3px solid var(--gold); }
+  .callout-red  { border-left: 3px solid var(--red); }
+
+  .article-footer { border-top: 1px solid var(--border); padding-top: 40px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
+  .footer-left p { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; margin: 0 0 6px; }
+  .footer-links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 8px; background: var(--gold-dim); border: 1px solid rgba(217,164,65,0.3);
+    border-radius: 6px; padding: 10px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gold);
+    text-decoration: none; letter-spacing: 0.08em; transition: background 0.2s;
+  }
+  .footer-link:hover { background: rgba(217,164,65,0.22); }
+
+  @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .hero { animation: fadeSlideUp 0.7s ease both; }
+  section { animation: fadeSlideUp 0.6s ease both; }
+
+  @media (max-width: 600px) {
+    .container { padding: 0 16px 64px; }
+    .hero { padding: 48px 0 40px; }
+    .ghost-hero { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ═══ HERO ═══ -->
+  <header class="hero">
+    <div class="hero-eyebrow">Part VI · Corrected Twice · Unity · C# · Both Kingdoms</div>
+
+    <h1>
+      Marked,<br>
+      <span class="forest-accent italic" style="color:#7fc296;">Then Made:</span><br>
+      Both Kingdoms, <span class="accent">Wired</span>
+    </h1>
+
+    <div class="hero-meta">
+      <span>📅 August 2026</span>
+      <span class="sep">·</span>
+      <span>🔗 github.com/niyid/ogbojuode-3d · irekeonibudo-3d</span>
+      <span class="sep">·</span>
+      <span>📱 Unity · C# · Android</span>
+      <span class="sep">·</span>
+      <span>⏱ 8 min read</span>
+    </div>
+
+    <p class="hero-lead">
+      This entry has already been wrong once in each direction. A first draft described weighted riddle pools
+      and procedural placement as shipped when they weren't — nothing existed but <code>TODO(next-iteration)</code>
+      markers. A second draft corrected that down to "nothing was built," which was true the moment it was
+      written and false by the time anyone read it, because the marked work got done in the same session:
+      built, wired into <code>SceneSetupWizard.cs</code>, committed, and pushed to <code>main</code> in both
+      repos. This is the version checked directly against those commits — <code>294a13c</code> and its
+      sibling — not against a session summary of either.
+    </p>
+
+    <svg class="ghost-hero" viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="40" y="40" width="80" height="110" rx="4" stroke="#b3402b" stroke-width="2" opacity="0.5"/>
+      <path d="M55 65 L105 65 M55 85 L95 85 M55 105 L100 105 M55 125 L85 125" stroke="#d9a441" stroke-width="2" opacity="0.5"/>
+    </svg>
+  </header>
+
+  <!-- ═══ SECTION: THE SECOND CORRECTION ═══ -->
+  <section>
+    <div class="section-kicker">The Second Correction</div>
+    <h2>Two Wrong Drafts, In Opposite Directions</h2>
+    <p>
+      The first draft of this entry claimed weighted riddle pools, procedural spirit placement, and a
+      self-triggering <code>DialogueSpeaker</code> were already built and shipped. They weren't — that account
+      came from a session summary describing discussed work, not the actual repository state. The second draft
+      corrected that, and correctly, down to a list of <code>TODO(next-iteration)</code> markers: real
+      call-site comments, no working code behind any of them.
+    </p>
+    <p>
+      That second draft was accurate when it was written and stale by the time it mattered, because the
+      marked work — every item on that TODO list — got built in the same working session it was marked in,
+      and pushed to <code>main</code> in both <code>ogbojuode-3d</code> and <code>irekeonibudo-3d</code>. Nine
+      new or rewritten scripts, wired into <code>SceneSetupWizard.cs</code> at the exact call sites the
+      previous draft named, verified against the two repos' actual commit logs rather than reconstructed from
+      a summary of the session.
+    </p>
+
+    <div class="callout callout-good">
+      <span class="callout-icon">✅</span>
+      <div class="callout-body">
+        <strong>Worth saying plainly, this time in the other direction</strong>
+        <p>The systems this article once called vaporware are in the repos. <code>git log --oneline -3</code>
+        on both projects shows the commit; <code>git status</code> shows a clean working tree. This draft is
+        written from those files, not from what anyone remembers building.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: WHAT ACTUALLY SHIPPED ═══ -->
+  <section>
+    <div class="section-kicker">This Pass</div>
+    <h2>Nine Scripts, Byte-Identical Across Both Kingdoms</h2>
+    <p>
+      Every system the earlier drafts described as either shipped or merely marked is now real: a weighted
+      <code>RiddlePool</code> with wisdom-gated difficulty, a <code>RunSeed</code> that gives every procedural
+      draw its own named stream off one playthrough seed, a <code>WorldBounds</code> struct replacing three
+      separate sets of magic numbers, run-to-run stat variance via <code>CreatureStatRoller</code>, scattered
+      (not fixed) spirit placement via <code>ProceduralSpiritPlacer</code>, branching ambient chatter via
+      <code>DialogueTree</code>/<code>DialogueSpeaker</code>, and a <code>WisdomTracker</code> that now
+      persists both the wisdom total and a codex of every riddle and creature type encountered, across app
+      restarts, via <code>PlayerPrefs</code>.
+    </p>
+
+    <div class="stat-strip">
+      <div class="stat-box"><div class="stat-num">9</div><div class="stat-label">shared scripts · byte-identical, both repos</div></div>
+      <div class="stat-box"><div class="stat-num">5</div><div class="stat-label">files rewritten per repo</div></div>
+      <div class="stat-box"><div class="stat-num">1</div><div class="stat-label">cross-project inconsistency, resolved</div></div>
+      <div class="stat-box"><div class="stat-num">0</div><div class="stat-label">TODO(next-iteration) markers left on this list</div></div>
+    </div>
+
+    <div class="callout callout-good">
+      <span class="callout-icon">🔍</span>
+      <div class="callout-body">
+        <strong>The one real inconsistency this pass fixed</strong>
+        <p><code>ogbojuode-3d/RiddleGiver.cs</code> used to resolve a failed riddle via a direct
+        <code>GetComponent&lt;OstrichKingBoss&gt;()</code> reference, while <code>irekeonibudo-3d</code>'s
+        already used the more portable <code>SendMessage("OnRiddleFailed", SendMessageOptions.DontRequireReceiver)</code>.
+        Both files now use <code>SendMessage</code>, and the two <code>RiddleGiver.cs</code> files are
+        byte-identical again — confirmed with a plain <code>diff</code>, not assumed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: WHERE EACH PIECE LANDED ═══ -->
+  <section>
+    <div class="section-kicker">The Wiring</div>
+    <h2>Where Each Idea Actually Attaches</h2>
+    <p>
+      Every item the earlier draft listed as a comment now has a real anchor point — a class, a call, a line
+      in <code>SceneSetupWizard.cs</code> that runs it. Here's where each one landed, checked directly against
+      the source.
+    </p>
+
+    <div class="item-list">
+      <div class="item-row">
+        <div class="item-name">Riddle pools</div>
+        <div class="item-desc"><code>RiddleGiver.cs</code> now carries an optional <code>RiddlePool</code> field; if assigned, <code>Start()</code> calls <code>RiddlePool.PickIndex()</code> for a weighted, anti-repeat draw instead of using the fixed inspector fields. <code>SceneSetupWizard</code> builds and assigns a dedicated pool asset per spirit type — <code>OstrichKingRiddlePool</code>/<code>ArogidigbaRiddlePool</code> for the bosses, <code>GhommidRiddlePool</code>/<code>MotherSpiritRiddlePool</code> for the wanderers.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Wisdom-gated difficulty</div>
+        <div class="item-desc"><code>RiddleGiver.EffectiveMinDifficulty()</code> raises the difficulty <em>floor</em> — not just the ceiling — as <code>WisdomTracker.currentWisdom</code> climbs past configurable thresholds, capped so it never exceeds that spirit's own <code>maxDifficulty</code>. A ghommid stays lighter than the boss even at high wisdom.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Stat variance</div>
+        <div class="item-desc"><code>CreatureStatRoller.RollVariance()</code>, called right after <code>CreatureAI.ApplyPreset()</code> in the wizard — nudges health/speed/damage/aggro-range ±15% per instance without disturbing the tuned baseline between creature types.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Procedural placement</div>
+        <div class="item-desc"><code>ProceduralSpiritPlacer.GeneratePositions()</code> scatters ghommid/mother-spirit spawn points inside <code>WorldBounds</code>' band with minimum clearance from each other and from creature spawns; <code>JitterPosition()</code> adds smaller variance around creatures' hand-authored staging so their order is preserved but their exact spot isn't.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Bounds struct</div>
+        <div class="item-desc"><code>WorldBounds</code> replaced <code>ExpeditionManager</code>'s standalone <code>villageBoundaryZ</code> float and the duplicated min/max literals in the wizard with one struct, read from both places — <code>OgbojuOdeDefaults</code> and <code>IrekeOnibudoDefaults</code> are the only per-story difference in an otherwise identical file.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Reproducible seed</div>
+        <div class="item-desc"><code>RunSeed.NewRandom(streamName)</code> is now called from every procedural site — riddle picks, stat rolls, placement, dialogue branching — each keyed by its own stream name so systems don't correlate with each other, all derived from one playthrough seed set via <code>RunSeed.Initialize()</code>.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Dialogue pools</div>
+        <div class="item-desc"><code>DialogueTree</code> (branching weighted lines) + <code>DialogueSpeaker</code> (auto-fires on proximity, walks the tree) replace the old single fixed line per ghommid/mother-spirit-guide. Wired via <code>GetOrCreateGhommidChatter()</code>/<code>GetOrCreateMotherSpiritChatter()</code> in the wizard.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Codex / persistence</div>
+        <div class="item-desc"><code>WisdomTracker</code> now owns <code>Save()</code>/<code>Load()</code> over <code>PlayerPrefs</code>, plus <code>seenRiddles</code>/<code>seenCreatureTypes</code> sets keyed by riddle text (stable across pool reshuffles) rather than pool index — cross-session anti-repeat and journal data in one place.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Accessibility</div>
+        <div class="item-desc"><code>MobileTouchUI.interactButton</code> is now wired to <code>TryInteractWithNearbyRiddleGiver()</code>, calling <code>RiddleGiver.Interact()</code> directly — the F-key path's touch equivalent, previously missing entirely on mobile.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: RUNSEED ═══ -->
+  <section>
+    <div class="section-kicker">One File, Now Actually Wired</div>
+    <h2>RunSeed.cs — This Is What "Wired In" Looks Like</h2>
+    <p>
+      <code>RunSeed</code> is the clearest example of the gap between the marked version and the built one. It
+      doesn't just exist in isolation anymore — every procedural system asks it for a named stream, so a
+      riddle pick, a stat roll, and a spirit placement in the same playthrough are each independently random
+      but still reproducible from a single seed.
+    </p>
+
+    <div class="code-block">
+      <div class="code-header"><span>RunSeed.cs — full file, both repos, byte-identical</span><span class="lang">C#</span></div>
+      <div class="code-body"><span class="kw">public static class</span> <span class="ty">RunSeed</span>
+{
+    <span class="kw">public static int</span> Value { <span class="kw">get</span>; <span class="kw">private set</span>; }
+    <span class="kw">private static bool</span> initialized = <span class="kw">false</span>;
+
+    <span class="kw">public static void</span> <span class="fn">Initialize</span>(<span class="kw">int</span>? forcedSeed = <span class="kw">null</span>)
+    {
+        Value = forcedSeed ?? System.Guid.NewGuid().GetHashCode();
+        initialized = <span class="kw">true</span>;
+        Debug.Log($<span class="str">"[RunSeed] Playthrough seed: {Value}"</span>);
+    }
+
+    <span class="kw">public static</span> System.Random <span class="fn">NewRandom</span>(<span class="kw">string</span> streamName)
+    {
+        <span class="kw">if</span> (!initialized) Initialize();
+        <span class="kw">int</span> combined = Value ^ streamName.GetHashCode();
+        <span class="kw">return new</span> System.Random(combined);
+    }
+}</div>
+    </div>
+
+    <p>
+      No caller has to remember to seed anything — <code>NewRandom()</code> auto-initializes on first use, and
+      every stream is combined with the playthrough value via a distinct <code>streamName</code>
+      (<code>"riddle_&lt;spirit&gt;"</code>, <code>"creature_&lt;id&gt;"</code>, <code>"dialogue_&lt;id&gt;"</code>)
+      so no two systems draw from the same sequence. That's the difference this entry is actually about: not a
+      better comment at the call site, but the call itself.
+    </p>
+  </section>
+
+  <!-- ═══ SECTION: BOTH PROJECTS ═══ -->
+  <section>
+    <div class="section-kicker">Portability, Again</div>
+    <h2>The Audit Landed In Both Repos The Same Way</h2>
+    <p>
+      Part V's claim — that <code>ogbojuode-3d</code> and <code>irekeonibudo-3d</code> share enough
+      architecture to make changes portable between them — is now demonstrated rather than argued. Nine shared
+      scripts are byte-identical between the two repos; only the ScriptableObject pool/tree <em>assets</em> and
+      <code>SceneSetupWizard</code>'s reflavored content (Ostrich-King vs. Arogidigba, forest vs. undersea
+      wording) differ per story.
+    </p>
+
+    <div class="compare-cards">
+      <div class="compare-header">
+        <div class="compare-header-cell">Pattern</div>
+        <div class="compare-header-cell">ogbojuode-3d</div>
+        <div class="compare-header-cell">irekeonibudo-3d</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">RiddleGiver failure hookup</div>
+        <div class="compare-cell"><code>SendMessage(...)</code> — converged onto the sibling's pattern</div>
+        <div class="compare-cell"><code>SendMessage(...)</code> — unchanged; was already correct</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">WisdomTracker.cs</div>
+        <div class="compare-cell">Persistence + codex, <code>PlayerPrefs</code>-backed</div>
+        <div class="compare-cell">Byte-for-byte identical file — built once, confirmed via <code>diff</code></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">Boss riddle pool</div>
+        <div class="compare-cell"><code>OstrichKingRiddlePool</code> — 4 entries, Medium/Hard, wisdomReward 50</div>
+        <div class="compare-cell"><code>ArogidigbaRiddlePool</code> — mirrors the shape, undersea-flavored wording</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">Wanderer riddle pool</div>
+        <div class="compare-cell"><code>GhommidRiddlePool</code> — 5 entries, Easy/Medium, capped at Medium regardless of wisdom</div>
+        <div class="compare-cell"><code>MotherSpiritRiddlePool</code> — same cap and shape, Iya Ireke-flavored</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: WHAT'S LEFT ═══ -->
+  <section>
+    <div class="section-kicker">Roadmap</div>
+    <h2>What's Actually Left</h2>
+    <p>
+      Shorter list than either previous draft implied. The procedural layer is done; what remains is mostly UI
+      and content, plus one verification step that hasn't happened on either project yet.
+    </p>
+
+    <div class="item-list">
+      <div class="item-row">
+        <div class="item-name">Riddle UI</div>
+        <div class="item-desc">Still the actual biggest gap — <code>RiddleGiver.Interact()</code> logs the riddle and auto-resolves as correct rather than showing a real prompt-and-answer screen. Everything upstream of the UI (pool, difficulty gating, codex) is ready for it to attach to.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Unity Editor compile check</div>
+        <div class="item-desc">Neither project has been opened in the Editor since these changes landed. The scripts reference each other in enough directions — <code>RiddleGiver → RiddlePool → WisdomTracker → RunSeed</code>, <code>SceneSetupWizard → all of the above</code> — that a typo'd reference could still be sitting there uncaught.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Dialogue UI</div>
+        <div class="item-desc"><code>DialogueSpeaker</code> logs lines to the console the same way <code>RiddleGiver</code> logs riddles; a real dialogue box for ambient chatter is the equivalent gap on that side.</div>
+      </div>
+      <div class="item-row">
+        <div class="item-name">Animation, HUD, Audio, save-file format</div>
+        <div class="item-desc">Unchanged from Part V — still open in both projects. Wisdom/codex now persist via <code>PlayerPrefs</code>, but a real save-file format for fuller game state is still ahead.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONCLUSION ═══ -->
+  <section>
+    <div class="section-kicker">Conclusion</div>
+    <h2>The Only Source Of Truth Is The Diff</h2>
+    <p>
+      Five parts in, this series was mostly about proving an architecture travels — that a script written for
+      one Fagunwa book keeps working, unmodified, when pointed at another. This entry, rewritten twice now, is
+      a smaller and less comfortable proof: that a description of work drifts from the work itself in both
+      directions if nobody checks against the actual files each time — first by claiming too much, then by
+      correcting to too little after the correction was already out of date. The fix isn't a better summary at
+      either extreme. It's <code>diff</code>, <code>git log</code>, and reading the files that exist right now,
+      every time this gets written down. That's what this version is.
+    </p>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="article-footer">
+    <div class="footer-left">
+      <p>Two sibling Unity/C# prototypes — riddle pools, seeded variance, procedural placement, dialogue trees, and codex persistence, verified against the actual commits in each repo.</p>
+      <p>github.com/niyid/ogbojuode-3d · github.com/niyid/irekeonibudo-3d · github.com/niyid/irekeonibudo · github.com/niyid/ogbojuode</p>
+    </div>
+    <div class="footer-links">
+      <a class="footer-link" href="https://niyid.github.io/irekeonibudo/fagunwa-rpgs-article.html" target="_blank">← Part I: Water and Wood</a>
+      <a class="footer-link" href="https://niyid.github.io/ogbojuode/fagunwa-rpgs-article-part2.html" target="_blank">← Part II: Redrawing the Forest</a>
+      <a class="footer-link" href="https://niyid.github.io/ogbojuode/fagunwa-rpgs-article-part3.html" target="_blank">← Part III: New Bones, Old Roots</a>
+      <a class="footer-link" href="https://niyid.github.io/ogbojuode-3d/fagunwa-rpgs-article-part4.html" target="_blank">← Part IV: Flesh on the Bones</a>
+      <a class="footer-link" href="https://niyid.github.io/irekeonibudo-3d/fagunwa-rpgs-article-part5.html" target="_blank">← Part V: Same Skeleton, Deeper Water</a>
+      <a class="footer-link" href="https://github.com/niyid/ogbojuode-3d" target="_blank">🎲 ogbojuode-3d →</a>
+      <a class="footer-link" href="https://github.com/niyid/irekeonibudo-3d" target="_blank">🌊 irekeonibudo-3d →</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
