@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rendered, Not Described: Both Kingdoms in Twenty Shots</title>
+
+<!-- SEO -->
+<meta name="description" content="Part VII: twenty screenshots — ten per kingdom — of the low-poly hub-and-forest worlds built across ogbojuode-3d and irekeonibudo-3d, deployed straight from the Unity Editor into each project's screenshots/ folder. The shared Swift/Brute/Titan creature cast, reflavored per story, seen for the first time rather than described.">
+<meta name="author" content="niyid">
+<meta name="keywords" content="Yoruba literature, D.O. Fagunwa, Unity, C#, Android, screenshots, low-poly, Tripo AI, Techducat">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rendered, Not Described: Both Kingdoms in Twenty Shots">
+<meta property="og:description" content="Part VII of the Fagunwa RPG series — the first entry with pictures instead of code. Twenty screenshots, ten per kingdom, of the shared Swift/Brute/Titan creature cast reflavored across both projects.">
+<meta property="og:url" content="https://niyid.github.io/irekeonibudo-3d/fagunwa-rpgs-article-part7.html">
+<meta property="og:site_name" content="Techducat">
+<meta property="article:author" content="https://github.com/niyid">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rendered, Not Described: Both Kingdoms in Twenty Shots">
+<meta name="twitter:description" content="Six parts of diffs and commit logs, and not one picture. This one is nothing but pictures — twenty of them, straight out of the Unity Editor.">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://niyid.github.io/irekeonibudo-3d/fagunwa-rpgs-article-part7.html">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg:           #080907;
+    --surface:      #0d100c;
+    --panel:        #12160f;
+    --border:       #22271d;
+    --border-hi:    #3a4230;
+    --gold:         #d9a441;
+    --gold-dim:     rgba(217,164,65,0.14);
+    --sea:          #2f7a82;
+    --sea-dim:      rgba(47,122,130,0.14);
+    --forest:       #4a8f63;
+    --forest-dim:   rgba(74,143,99,0.14);
+    --red:          #b3402b;
+    --red-dim:      rgba(179,64,43,0.14);
+    --violet:       #8a76c9;
+    --text:         #e9e4d6;
+    --muted:        #7c8577;
+    --muted-hi:     #b3ae9c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(217,164,65,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(217,164,65,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 28px 96px;
+  }
+
+  .hero { padding: 80px 0 64px; border-bottom: 1px solid var(--border); margin-bottom: 64px; position: relative; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 28px;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
+
+  h1 {
+    font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900; line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 28px;
+  }
+  h1 .accent { color: var(--gold); }
+  h1 .italic { font-style: italic; }
+  h1 .sea-accent { color: #6fb3ba; }
+  h1 .forest-accent { color: #7fc296; }
+
+  .hero-meta {
+    display: flex; align-items: center; gap: 20px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 32px; flex-wrap: wrap;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta .sep { color: var(--border-hi); }
+
+  .hero-lead {
+    font-size: 18px; font-weight: 300; color: var(--muted-hi); line-height: 1.7; max-width: 680px;
+    border-left: 3px solid var(--gold); padding-left: 20px;
+  }
+
+  section { margin-bottom: 72px; }
+
+  .section-kicker {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-kicker.sea { color: #6fb3ba; }
+  .section-kicker.forest { color: #7fc296; }
+  .section-kicker::after { content: ''; display: block; flex: 1; height: 1px; background: var(--border); }
+
+  h2 {
+    font-family: 'Playfair Display', serif; font-size: clamp(24px, 3.5vw, 36px); font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.015em; margin-bottom: 24px;
+  }
+  h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+
+  p { margin-bottom: 18px; color: var(--muted-hi); }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 500; }
+  a { color: var(--gold); }
+  code { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; background: var(--panel); padding: 2px 6px; border-radius: 4px; color: var(--muted-hi); border: 1px solid var(--border); }
+
+  .callout { display: flex; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; margin: 28px 0; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; }
+  .callout-body strong { display: block; margin-bottom: 4px; font-size: 14px; }
+  .callout-body p { font-size: 13.5px; margin: 0; color: var(--muted-hi); }
+  .callout-good { border-left: 3px solid var(--forest); }
+  .callout-info { border-left: 3px solid var(--sea); }
+  .callout-warn { border-left: 3px solid var(--gold); }
+
+  .compare-cards { display: flex; flex-direction: column; gap: 0; margin: 28px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .compare-header { display: grid; grid-template-columns: 130px 1fr 1fr; background: var(--panel); border-bottom: 2px solid var(--border-hi); }
+  .compare-header-cell { padding: 12px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+  .compare-header-cell:nth-child(1) { color: var(--muted); }
+  .compare-header-cell:nth-child(2) { color: #7fc296; border-left: 1px solid var(--border); }
+  .compare-header-cell:nth-child(3) { color: #6fb3ba; border-left: 1px solid var(--border); }
+  .compare-row { display: grid; grid-template-columns: 130px 1fr 1fr; border-bottom: 1px solid var(--border); }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row:hover { background: rgba(255,255,255,0.016); }
+  .compare-cell { padding: 14px 16px; font-size: 13.5px; line-height: 1.5; }
+  .compare-cell:nth-child(2), .compare-cell:nth-child(3) { border-left: 1px solid var(--border); }
+  .compare-cell.dim-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  @media (max-width: 580px) {
+    .compare-header { grid-template-columns: 1fr; }
+    .compare-header-cell:nth-child(1) { display: none; }
+    .compare-header-cell:nth-child(2), .compare-header-cell:nth-child(3) { border-left: none; border-top: 1px solid var(--border); }
+    .compare-row { grid-template-columns: 1fr; }
+    .compare-cell.dim-label { background: var(--panel); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 16px 4px; }
+    .compare-cell:nth-child(2), .compare-cell:nth-child(3) { border-left: none; padding-top: 6px; padding-bottom: 6px; }
+    .compare-cell:nth-child(3) { padding-bottom: 14px; }
+  }
+
+  /* ═══ SCREENSHOT COMPONENTS ═══ */
+  .shot { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); margin: 28px 0; position: relative; }
+  .shot img { width: 100%; display: block; background: #05130f; }
+  .shot-tag {
+    position: absolute; top: 14px; left: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 11px; border-radius: 20px;
+    background: rgba(8,9,7,0.72); backdrop-filter: blur(2px); border: 1px solid rgba(255,255,255,0.14); color: var(--text);
+  }
+  .shot-tag.swift  { color: #7fc296; border-color: rgba(127,194,150,0.4); }
+  .shot-tag.brute  { color: #d97a63; border-color: rgba(217,122,99,0.4); }
+  .shot-tag.titan  { color: var(--gold); border-color: rgba(217,164,65,0.4); }
+  .shot-tag.boss   { color: #e2635a; border-color: rgba(226,99,90,0.4); }
+  .shot-tag.guide  { color: #a8c8e8; border-color: rgba(168,200,232,0.4); }
+  .shot-tag.player { color: var(--muted-hi); border-color: var(--border-hi); }
+  .shot-caption { padding: 16px 20px; border-top: 1px solid var(--border); }
+  .shot-caption .cap-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; display: block; }
+  .shot-caption p { font-size: 14px; margin: 0; color: var(--muted-hi); }
+
+  .shot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+  .shot-grid .shot { margin: 0; }
+  .shot-grid .shot-caption { padding: 12px 16px; }
+  .shot-grid .shot-caption p { font-size: 12.5px; }
+  @media (max-width: 600px) { .shot-grid { grid-template-columns: 1fr; } }
+
+  .film-strip { display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 8px 0 -8px; }
+  .film-strip::before, .film-strip::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .stat-strip { display: flex; flex-wrap: wrap; gap: 16px; margin: 28px 0; }
+  .stat-box { flex: 1; min-width: 140px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+  .article-footer { border-top: 1px solid var(--border); padding-top: 40px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
+  .footer-left p { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; margin: 0 0 6px; }
+  .footer-links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 8px; background: var(--gold-dim); border: 1px solid rgba(217,164,65,0.3);
+    border-radius: 6px; padding: 10px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gold);
+    text-decoration: none; letter-spacing: 0.08em; transition: background 0.2s;
+  }
+  .footer-link:hover { background: rgba(217,164,65,0.22); }
+
+  @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .hero { animation: fadeSlideUp 0.7s ease both; }
+  section { animation: fadeSlideUp 0.6s ease both; }
+
+  @media (max-width: 600px) {
+    .container { padding: 0 16px 64px; }
+    .hero { padding: 48px 0 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ═══ HERO ═══ -->
+  <header class="hero">
+    <div class="hero-eyebrow">Part VII · Screenshots · Unity · Both Kingdoms</div>
+
+    <h1>
+      Rendered,<br>
+      <span class="italic" style="color:#7fc296;">Not</span> <span class="sea-accent italic">Described:</span><br>
+      Both Kingdoms, <span class="accent">In Twenty Shots</span>
+    </h1>
+
+    <div class="hero-meta">
+      <span>📅 September 2026</span>
+      <span class="sep">·</span>
+      <span>🔗 github.com/niyid/ogbojuode-3d · irekeonibudo-3d</span>
+      <span class="sep">·</span>
+      <span>📸 20 screenshots, 10 per kingdom</span>
+      <span class="sep">·</span>
+      <span>⏱ 6 min read</span>
+    </div>
+
+    <p class="hero-lead">
+      Six parts of this series have been diffs, commit hashes, and <code>git log --oneline</code> output —
+      proof that the code exists, none that anything on screen does. This entry inverts that: no code
+      block below is longer than a file name. Twenty screenshots, ten pulled from each project's Play mode,
+      copied straight off <code>~/git/irekeonibudo-3d/screenshots/</code> the way the terminal actually left
+      them — not restaged, not cropped to hide the primitive trees. What the two kingdoms look like right
+      now, seen rather than summarized.
+    </p>
+  </header>
+
+  <!-- ═══ SECTION: WHY PICTURES NOW ═══ -->
+  <section>
+    <div class="section-kicker">Overdue</div>
+    <h2>Six Entries In, Not One Screenshot</h2>
+    <p>
+      Every previous part of this series proved its claims against <code>diff</code> and the commit log,
+      because that's what code review checks. But a riddle pool being wisdom-gated and a riddle pool
+      <em>looking like anything at all</em> are different claims, and this series never made the second one
+      until now. These twenty images are that check — the Unity Editor's Play mode, a screenshot taken, the
+      file copied to disk, nothing staged in between.
+    </p>
+    <div class="callout callout-info">
+      <span class="callout-icon">🗂️</span>
+      <div class="callout-body">
+        <strong>Where these actually live</strong>
+        <p>All twenty files were copied into <code>~/git/irekeonibudo-3d/screenshots/</code> in one pass —
+        both kingdoms' captures deployed side by side in the same folder, <code>ireke_*</code> and
+        <code>ogbo_*</code> prefixed so they sort apart. That's also where the images below are served
+        from.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: SHARED CAST ═══ -->
+  <section>
+    <div class="section-kicker">One Cast, Two Skins</div>
+    <h2>Swift, Brute, Titan — Same Three Presets, Reflavored</h2>
+    <p>
+      <code>CreatureAI.cs</code> ships one script with three role presets — <strong>Swift</strong> (fast,
+      fragile), <strong>Brute</strong> (slow, punishing), and <strong>Titan</strong> (towering) — rather than
+      three duplicated files per story. What's on screen is the visible half of that architecture claim: two
+      completely different bestiaries, built from the same three stat curves.
+    </p>
+
+    <div class="compare-cards">
+      <div class="compare-header">
+        <div class="compare-header-cell">Preset</div>
+        <div class="compare-header-cell">Ogboju Ode (forest)</div>
+        <div class="compare-header-cell">Ìrèké Oníbùdó (undersea)</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">Swift</div>
+        <div class="compare-cell"><strong>Eru</strong> — a clawed hand erupting from a mushroom ring, close to the village and gone before it lands a hit</div>
+        <div class="compare-cell"><strong>Ejo Fifo</strong> — the flying snake from the book that seizes a princess, quick and airborne over the reef</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">Brute</div>
+        <div class="compare-cell"><strong>Ijamba</strong> — slow, spined, built to punish standing still</div>
+        <div class="compare-cell"><strong>Ologbo Ijakadi</strong> — the Wrestler-Cat from the story-within-a-story, same spined silhouette, same patience</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">Titan</div>
+        <div class="compare-cell"><strong>Agbako</strong> — moss-headed, mismatched white legs, deepest before the boss</div>
+        <div class="compare-cell"><strong>Eja Jagunjagun</strong> — a crowned warrior-fish guarding Arogidigba's kingdom, spear-armed</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">Riddle boss</div>
+        <div class="compare-cell"><strong>Oba Eye</strong>, the Ostrich-King — feathered, branch-crowned, harmless unless provoked</div>
+        <div class="compare-cell"><strong>Arogidigba</strong>, the mermaid queen — trials designed for failure, per the source book</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell dim-label">Guide spirit</div>
+        <div class="compare-cell"><strong>Ghommid</strong> (Elere) — wandering, non-hostile, each carrying a smaller riddle</div>
+        <div class="compare-cell"><strong>Iya Ireke</strong> — the protagonist's dead mother's spirit, his actual guide through the trials in the book</div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn">
+      <span class="callout-icon">🧱</span>
+      <div class="callout-body">
+        <strong>What's placeholder and what isn't</strong>
+        <p>The seven custom character/creature models in each kingdom came out of a Tripo/Meshy prompt list
+        (<code>irekeonibudo-meshy_prompts.txt</code>) — that's the smooth, sculpted cast you'll see below.
+        The trees and mushrooms are Kenney/Poly Haven CC0 kit assets, low-poly on purpose, holding the
+        place until a custom flora pass is worth the credits.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: IREKE GALLERY ═══ -->
+  <section>
+    <div class="section-kicker sea">Ìjọba Omi — The Undersea Kingdom</div>
+    <h2>Ìrèké Oníbùdó: Ten Shots From the Reef</h2>
+    <p>
+      A shipwrecked traveler swept into Arogidigba's undersea kingdom, guided through her trials by his dead
+      mother's spirit — that's the book's actual premise, and it's the one <code>SceneSetupWizard</code>
+      builds when you run <strong>Ireke Onibudo → Build Entire Universe</strong>. Coral-reef stand-ins
+      instead of forest, a riverside hub instead of a village, the same three-preset cast wearing this
+      story's names.
+    </p>
+
+    <div class="shot">
+      <span class="shot-tag boss">Boss encounter</span>
+      <img src="screenshots/ireke_01_showdown_wide.png" alt="Ireke Onibudo protagonist facing Arogidigba the mermaid queen among the reef-trees">
+      <div class="shot-caption">
+        <span class="cap-title">The Showdown, Wide</span>
+        <p>Arogidigba looms over the hero at full height against the grove — the wide establishing shot for
+        what the book frames as a trial, not a fight. She only turns hostile if it's failed.</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag boss">Boss · close-up</span>
+      <img src="screenshots/ireke_07_arogidigba_closeup.png" alt="Close-up of Arogidigba the mermaid queen showing her crown and blue-tipped tail">
+      <div class="shot-caption">
+        <span class="cap-title">Arogidigba, Close</span>
+        <p>Crown, trailing hair, a tail that fades from gold to the reef's own blue at the fin — the detail
+        pass the wide shot above doesn't have room for.</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag swift">Swift · Ejo Fifo</span>
+      <img src="screenshots/ireke_02_vs_ejofifo.png" alt="Hero encountering Ejo Fifo the flying snake near the tree line">
+      <div class="shot-caption">
+        <span class="cap-title">Ejo Fifo, Mid-Flight</span>
+        <p>The flying snake that seizes a princess in the source book — the Swift preset here, glimpsed
+        low against the trunk rather than standing still to be admired, which is the point of "fast,
+        fragile."</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag brute">Brute · Ologbo Ijakadi</span>
+      <img src="screenshots/ireke_03_vs_ologbo.png" alt="Hero facing Ologbo Ijakadi, the spined Wrestler-Cat, taller than the player">
+      <div class="shot-caption">
+        <span class="cap-title">Ologbo Ijakadi Rears Up</span>
+        <p>The Wrestler-Cat from the story-within-a-story — spined, coiled, and already taller than the
+        hero before the fight starts. Same Brute stat curve as Ijamba on the forest side, different
+        silhouette entirely.</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag titan">Titan · Eja Jagunjagun</span>
+      <img src="screenshots/ireke_04_vs_ejajagun.png" alt="Hero facing the crowned warrior-fish Eja Jagunjagun with a spear extended">
+      <div class="shot-caption">
+        <span class="cap-title">Eja Jagunjagun, Spear Extended</span>
+        <p>Crowned and towering — Arogidigba's warrior-fish guard, deepest in the kingdom before the queen
+        herself. The Titan preset's reach shows here: that spear crosses most of the frame.</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag guide">Guide · Iya Ireke</span>
+      <img src="screenshots/ireke_05_iyaireke.png" alt="Iya Ireke, the mother's spirit guide, draped in flowing robes with arms outstretched">
+      <div class="shot-caption">
+        <span class="cap-title">Iya Ireke, Arms Open</span>
+        <p>Not a generic NPC — the protagonist's actual mother's spirit from the book, the one who guides him
+        through Arogidigba's trials. Pale, draped, and deliberately still against the reef's motion.</p>
+      </div>
+    </div>
+
+    <div class="film-strip">Establishing · Action · Pack · Mood</div>
+    <div class="shot-grid">
+      <div class="shot">
+        <span class="shot-tag player">Establishing</span>
+        <img src="screenshots/ireke_06_establishing.png" alt="Wide establishing shot of the undersea kingdom's coral-tree grove">
+        <div class="shot-caption"><p>The reef grove from a distance — the hub-and-kingdom layout ported straight from <code>ogbojuode-3d</code>'s forest, same bones, different dressing.</p></div>
+      </div>
+      <div class="shot">
+        <span class="shot-tag player">Player action</span>
+        <img src="screenshots/ireke_08_player_action.png" alt="Hero seen from behind mid-action with blade at the hip">
+        <div class="shot-caption"><p>From behind, Idà (the blade) at the hip — the pose Egbe's teleport leaves you in mid-cast.</p></div>
+      </div>
+      <div class="shot">
+        <span class="shot-tag player">Full pack</span>
+        <img src="screenshots/ireke_09_pack.png" alt="Full cast shot with the flying snake, warrior-fish, and hero together in the grove">
+        <div class="shot-caption"><p>Ejo Fifo aloft, Eja Jagunjagun grounded, hero between them — the closest thing to a cast photo this kingdom has.</p></div>
+      </div>
+      <div class="shot">
+        <span class="shot-tag player">Mood</span>
+        <img src="screenshots/ireke_10_moonlit_mood.png" alt="Hero alone in a dusk blue-toned grove">
+        <div class="shot-caption"><p>Same directional "moonlight" the wizard sets up by default, no extra lighting pass — just a colder angle on it.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: OGBO GALLERY ═══ -->
+  <section>
+    <div class="section-kicker forest">Igbó Ìrèké — The Forest</div>
+    <h2>Ogboju Ode: Ten Shots From the Tree Line</h2>
+    <p>
+      Akara-Ogun, machete and musket, working out from a hub village toward the Ostrich-King deep in the
+      forest — the older of the two projects, and the one the second kingdom's architecture was copied from.
+      Same wizard menu command, same three-preset cast, warmer and greener than the reef.
+    </p>
+
+    <div class="shot">
+      <span class="shot-tag titan">Titan · Agbako</span>
+      <img src="screenshots/ogbo_01_showdown_wide.png" alt="Akara-Ogun facing Agbako the towering brute near a mushroom patch">
+      <div class="shot-caption">
+        <span class="cap-title">Agbako, Full Height</span>
+        <p>The wide establishing confrontation on this side — Agbako's full silhouette against the tree
+        line, deepest of the three creatures before the boss, a mushroom ring marking his ground.</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag swift">Swift · Eru</span>
+      <img src="screenshots/ogbo_02_vs_eru.png" alt="Akara-Ogun facing Eru, a clawed hand erupting from a mushroom ring">
+      <div class="shot-caption">
+        <span class="cap-title">Eru Breaks the Ring</span>
+        <p>Just a hand and a shoulder clearing the mushrooms — Eru doesn't linger long enough for a full
+        pose, which is exactly what "fast, fragile" is supposed to look like from a distance.</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag brute">Brute · Ijamba</span>
+      <img src="screenshots/ogbo_03_vs_ijamba.png" alt="Akara-Ogun facing the slow, spined Ijamba">
+      <div class="shot-caption">
+        <span class="cap-title">Ijamba Holds Its Ground</span>
+        <p>Same spined body plan as the reef's Ologbo Ijakadi — the Brute preset's shared mesh, unhidden
+        this close together in the series.</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag boss">Boss · Oba Eye</span>
+      <img src="screenshots/ogbo_04_ostrich_king.png" alt="The Ostrich-King, feathered and branch-crowned, wings spread">
+      <div class="shot-caption">
+        <span class="cap-title">Oba Eye, Wings Spread</span>
+        <p>Branch-crowned and half-feathered — the Ostrich-King's riddle encounter, harmless if left alone,
+        the way the book and the wizard's setup both intend it.</p>
+      </div>
+    </div>
+
+    <div class="shot">
+      <span class="shot-tag guide">Guide · Ghommid</span>
+      <img src="screenshots/ogbo_05_ghommid.png" alt="A mossy green Ghommid forest spirit mid-climb near the trees">
+      <div class="shot-caption">
+        <span class="cap-title">A Ghommid, Mid-Climb</span>
+        <p>One of three wandering Elere spirits, each carrying a smaller riddle of their own — moss-green
+        and caught here climbing rather than standing still for the screenshot.</p>
+      </div>
+    </div>
+
+    <div class="film-strip">Establishing · Close-up · Action · Pack · Mood</div>
+    <div class="shot-grid">
+      <div class="shot">
+        <span class="shot-tag player">Establishing</span>
+        <img src="screenshots/ogbo_06_establishing.png" alt="Wide establishing shot of the forest grove near the hub village">
+        <div class="shot-caption"><p>The tree line and a mushroom patch, Akara-Ogun small against both — the layout this project's undersea sibling later copied.</p></div>
+      </div>
+      <div class="shot">
+        <span class="shot-tag titan">Agbako close-up</span>
+        <img src="screenshots/ogbo_07_agbako_closeup.png" alt="Close-up on Agbako showing mossy head and mismatched white lower legs">
+        <div class="shot-caption"><p>Close enough to see the mismatch — moss-covered torso, pale scarred legs, a Titan built to look like he's survived worse fights than yours.</p></div>
+      </div>
+      <div class="shot">
+        <span class="shot-tag player">Player action</span>
+        <img src="screenshots/ogbo_08_player_action.png" alt="Akara-Ogun in profile holding the machete steady">
+        <div class="shot-caption"><p>Machete held low, profile view — the idle stance between swings, musket left holstered for this shot.</p></div>
+      </div>
+      <div class="shot">
+        <span class="shot-tag player">Full pack</span>
+        <img src="screenshots/ogbo_09_pack.png" alt="Akara-Ogun, a Ghommid spirit, and Agbako together in the grove">
+        <div class="shot-caption"><p>Hunter, spirit, and Titan sharing one frame — the forest's answer to the reef's cast photo above.</p></div>
+      </div>
+      <div class="shot">
+        <span class="shot-tag player">Mood</span>
+        <img src="screenshots/ogbo_10_dusk_mood.png" alt="Akara-Ogun alone at dusk near a mushroom patch, warm-toned lighting">
+        <div class="shot-caption"><p>Warm dusk tone instead of the reef's cold moonlight — same wizard-built lighting rig, opposite end of its range.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION: STATS ═══ -->
+  <section>
+    <div class="section-kicker">Tally</div>
+    <h2>What Twenty Screenshots Actually Confirm</h2>
+    <div class="stat-strip">
+      <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">kingdoms, one shared architecture</div></div>
+      <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">CreatureAI presets, six creature names</div></div>
+      <div class="stat-box"><div class="stat-num">7</div><div class="stat-label">AI-generated custom models per kingdom</div></div>
+      <div class="stat-box"><div class="stat-num">20</div><div class="stat-label">screenshots, zero restaged</div></div>
+    </div>
+    <p>
+      None of this replaces the riddle UI, the dialogue box, or the Unity Editor compile check that Part VI
+      left open — those are still open. What this pass confirms is narrower and, until now, unverified:
+      that <strong>Build Entire Universe</strong> in both projects produces an actual scene with an actual
+      cast standing in it, not just a console log saying it should.
+    </p>
+  </section>
+
+  <!-- ═══ CONCLUSION ═══ -->
+  <section>
+    <div class="section-kicker">Conclusion</div>
+    <h2>The Same Rule, Applied to Pixels This Time</h2>
+    <p>
+      Part VI's closing line was that the only source of truth is the diff — that a description of work
+      drifts from the work itself unless someone checks the actual files every time. Screenshots are the
+      same discipline turned on the render instead of the source: not a mood-boarded mockup of what
+      Arogidigba's kingdom might look like, but <code>ls -l</code> and twenty files that were actually
+      copied off an actual Play-mode session. The next entry that owes the series a compile check and a
+      riddle UI still owes them. This one only owed proof that there was something on screen worth checking
+      against — there is, and now it's on record.
+    </p>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="article-footer">
+    <div class="footer-left">
+      <p>Twenty screenshots, ten per kingdom, deployed to irekeonibudo-3d/screenshots/ — the shared Swift/Brute/Titan cast seen on screen for the first time in this series.</p>
+      <p>github.com/niyid/ogbojuode-3d · github.com/niyid/irekeonibudo-3d · github.com/niyid/irekeonibudo · github.com/niyid/ogbojuode</p>
+    </div>
+    <div class="footer-links">
+      <a class="footer-link" href="https://niyid.github.io/irekeonibudo/fagunwa-rpgs-article.html" target="_blank">← Part I: Water and Wood</a>
+      <a class="footer-link" href="https://niyid.github.io/ogbojuode/fagunwa-rpgs-article-part2.html" target="_blank">← Part II: Redrawing the Forest</a>
+      <a class="footer-link" href="https://niyid.github.io/ogbojuode/fagunwa-rpgs-article-part3.html" target="_blank">← Part III: New Bones, Old Roots</a>
+      <a class="footer-link" href="https://niyid.github.io/ogbojuode-3d/fagunwa-rpgs-article-part4.html" target="_blank">← Part IV: Flesh on the Bones</a>
+      <a class="footer-link" href="https://niyid.github.io/irekeonibudo-3d/fagunwa-rpgs-article-part5.html" target="_blank">← Part V: Same Skeleton, Deeper Water</a>
+      <a class="footer-link" href="https://niyid.github.io/ogbojuode-3d/fagunwa-rpgs-article-part6.html" target="_blank">← Part VI: Marked, Then Made</a>
+      <a class="footer-link" href="https://github.com/niyid/ogbojuode-3d" target="_blank">🎲 ogbojuode-3d →</a>
+      <a class="footer-link" href="https://github.com/niyid/irekeonibudo-3d" target="_blank">🌊 irekeonibudo-3d →</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
