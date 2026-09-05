@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rendered, Not Described: Both Kingdoms in Twenty Shots</title>
+<title>Rendered, Not Described: Every Duel, In Twenty Shots</title>
 
 <!-- SEO -->
-<meta name="description" content="Part VII: twenty screenshots — ten per kingdom — of the low-poly hub-and-forest worlds built across ogbojuode-3d and irekeonibudo-3d, deployed straight from the Unity Editor into each project's screenshots/ folder. The shared Swift/Brute/Titan creature cast, reflavored per story, seen for the first time rather than described.">
+<meta name="description" content="Part VII (revised): twenty screenshots — ten per kingdom, four duels each — of the low-poly hub-and-forest worlds built across ogbojuode-3d and irekeonibudo-3d, every shot pulled mid-encounter with an in-engine caption burned into the frame. The shared Swift/Brute/Titan/Boss creature cast, reflavored per story, checked against what's actually on screen.">
 <meta name="author" content="niyid">
 <meta name="keywords" content="Yoruba literature, D.O. Fagunwa, Unity, C#, Android, screenshots, low-poly, Tripo AI, Techducat">
 
 <!-- Open Graph -->
 <meta property="og:type" content="article">
-<meta property="og:title" content="Rendered, Not Described: Both Kingdoms in Twenty Shots">
-<meta property="og:description" content="Part VII of the Fagunwa RPG series — the first entry with pictures instead of code. Twenty screenshots, ten per kingdom, of the shared Swift/Brute/Titan creature cast reflavored across both projects.">
+<meta property="og:title" content="Rendered, Not Described: Every Duel, In Twenty Shots">
+<meta property="og:description" content="Part VII of the Fagunwa RPG series, revised — twenty screenshots, ten per kingdom, four duels each, every frame carrying its own in-engine caption bar.">
 <meta property="og:url" content="https://niyid.github.io/irekeonibudo-3d/fagunwa-rpgs-article-part7.html">
 <meta property="og:site_name" content="Techducat">
 <meta property="article:author" content="https://github.com/niyid">
 
 <!-- Twitter/X Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Rendered, Not Described: Both Kingdoms in Twenty Shots">
-<meta name="twitter:description" content="Six parts of diffs and commit logs, and not one picture. This one is nothing but pictures — twenty of them, straight out of the Unity Editor.">
+<meta name="twitter:title" content="Rendered, Not Described: Every Duel, In Twenty Shots">
+<meta name="twitter:description" content="Twenty screenshots, ten per kingdom, every one mid-duel with a caption bar burned into the PNG. No establishing shots, no mood boards — just the fights.">
 
 <!-- Canonical -->
 <link rel="canonical" href="https://niyid.github.io/irekeonibudo-3d/fagunwa-rpgs-article-part7.html">
@@ -229,12 +229,12 @@
 
   <!-- ═══ HERO ═══ -->
   <header class="hero">
-    <div class="hero-eyebrow">Part VII · Screenshots · Unity · Both Kingdoms</div>
+    <div class="hero-eyebrow">Part VII · Second Revision · 5 Shots Corrected</div>
 
     <h1>
       Rendered,<br>
       <span class="italic" style="color:#7fc296;">Not</span> <span class="sea-accent italic">Described:</span><br>
-      Both Kingdoms, <span class="accent">In Twenty Shots</span>
+      Every <span class="accent">Duel, In Twenty Shots</span>
     </h1>
 
     <div class="hero-meta">
@@ -242,96 +242,107 @@
       <span class="sep">·</span>
       <span>🔗 github.com/niyid/ogbojuode-3d · irekeonibudo-3d</span>
       <span class="sep">·</span>
-      <span>📸 20 screenshots, 10 per kingdom</span>
+      <span>📸 20 screenshots, 4 duels per kingdom</span>
       <span class="sep">·</span>
       <span>⏱ 6 min read</span>
     </div>
 
     <p class="hero-lead">
-      Six parts of this series have been diffs, commit hashes, and <code>git log --oneline</code> output —
-      proof that the code exists, none that anything on screen does. This entry inverts that: no code
-      block below is longer than a file name. Twenty screenshots, ten pulled from each project's Play mode,
-      copied straight off <code>~/git/irekeonibudo-3d/screenshots/</code> the way the terminal actually left
-      them — not restaged, not cropped to hide the primitive trees. What the two kingdoms look like right
-      now, seen rather than summarized.
+      This entry has now been checked against its own screenshots twice. The first pass mixed establishing
+      and mood shots in with the fights; the redo dropped those and kept only in-duel captures, which is when
+      two of the eight creatures — Ejá Jagunjagun and Arogidigba — turned out not to visually match their
+      names. Five files have since been re-rendered: <code>ireke_05</code> through <code>ireke_09</code>, the
+      same two encounters. Comparing the new files to the old ones byte-for-byte shows exactly what changed —
+      both creatures were pulled out from inside the tree canopy into open space, which is a camera/staging
+      fix, not a model fix. That happens to be enough to make one of the two read correctly, and not enough
+      for the other. Details below, per shot.
     </p>
   </header>
 
-  <!-- ═══ SECTION: WHY PICTURES NOW ═══ -->
+  <!-- ═══ SECTION: WHY THE REDO ═══ -->
   <section>
-    <div class="section-kicker">Overdue</div>
-    <h2>Six Entries In, Not One Screenshot</h2>
+    <div class="section-kicker">Redo</div>
+    <h2>The First Twenty Weren't Wrong, Just Off-Target</h2>
     <p>
-      Every previous part of this series proved its claims against <code>diff</code> and the commit log,
-      because that's what code review checks. But a riddle pool being wisdom-gated and a riddle pool
-      <em>looking like anything at all</em> are different claims, and this series never made the second one
-      until now. These twenty images are that check — the Unity Editor's Play mode, a screenshot taken, the
-      file copied to disk, nothing staged in between.
+      The previous version of this entry proved the wizard's <code>Build Entire Universe</code> command puts
+      an actual scene on screen — that part held up. What it didn't do was hold every image to the same
+      standard: some shots were framing (establishing, mood, "full pack"), which is atmosphere, not evidence.
+      This pass drops all of that and keeps only the twenty frames where the player is actually squared off
+      against a creature, one duel at a time, four duels per kingdom.
     </p>
     <div class="callout callout-info">
-      <span class="callout-icon">🗂️</span>
+      <span class="callout-icon">🏷️</span>
       <div class="callout-body">
-        <strong>Where these actually live</strong>
-        <p>All twenty files were copied into <code>~/git/irekeonibudo-3d/screenshots/</code> in one pass —
-        both kingdoms' captures deployed side by side in the same folder, <code>ireke_*</code> and
-        <code>ogbo_*</code> prefixed so they sort apart. That's also where the images below are served
-        from.</p>
+        <strong>The caption bar is real, not added after</strong>
+        <p>Each PNG in <code>screenshots/</code> already has a title and one line of description burned into
+        the bottom of the frame by the capture tool itself — <code>IREKE ONIBUDO — Ireke vs. Ejo Fifo</code>,
+        for example. Nothing below re-describes what that bar already says; the prose under each image adds
+        what the caption doesn't cover — angle, what's actually legible in the model, what looks unfinished.</p>
       </div>
     </div>
   </section>
 
   <!-- ═══ SECTION: SHARED CAST ═══ -->
   <section>
-    <div class="section-kicker">One Cast, Two Skins</div>
-    <h2>Swift, Brute, Titan — Same Three Presets, Reflavored</h2>
+    <div class="section-kicker">One Structure, Two Skins</div>
+    <h2>Four Duels, Same Order, Both Kingdoms</h2>
     <p>
-      <code>CreatureAI.cs</code> ships one script with three role presets — <strong>Swift</strong> (fast,
-      fragile), <strong>Brute</strong> (slow, punishing), and <strong>Titan</strong> (towering) — rather than
-      three duplicated files per story. What's on screen is the visible half of that architecture claim: two
-      completely different bestiaries, built from the same three stat curves.
+      Both projects walk the player through the same four-encounter shape — a fast opening threat, a slower
+      brute, a towering guard, and a riddle boss at the end — reflavored per story. The models themselves are
+      not shared meshes in a costume; each creature is its own sculpt from the Tripo/Meshy prompt list. What's
+      shared is the encounter order and, on the forest side at least, language the game's own captions use to
+      describe it — "fast, fragile" for the opener, "slow, brutal" for the second.
     </p>
-
     <div class="compare-cards">
       <div class="compare-header">
-        <div class="compare-header-cell">Preset</div>
+        <div class="compare-header-cell">Tier</div>
         <div class="compare-header-cell">Ogboju Ode (forest)</div>
         <div class="compare-header-cell">Ìrèké Oníbùdó (undersea)</div>
       </div>
       <div class="compare-row">
-        <div class="compare-cell dim-label">Swift</div>
-        <div class="compare-cell"><strong>Eru</strong> — a clawed hand erupting from a mushroom ring, close to the village and gone before it lands a hit</div>
-        <div class="compare-cell"><strong>Ejo Fifo</strong> — the flying snake from the book that seizes a princess, quick and airborne over the reef</div>
+        <div class="compare-cell dim-label">1 · Fast</div>
+        <div class="compare-cell"><strong>Erú</strong> — a green, leaf-skinned spirit with a spiked crown of
+        foliage, thin-limbed, circling at the tree line closest to the village</div>
+        <div class="compare-cell"><strong>Ejo Fifo</strong> — a winged serpent coiled up in the canopy, the
+        flying snake from the book that seizes a princess</div>
       </div>
       <div class="compare-row">
-        <div class="compare-cell dim-label">Brute</div>
-        <div class="compare-cell"><strong>Ijamba</strong> — slow, spined, built to punish standing still</div>
-        <div class="compare-cell"><strong>Ologbo Ijakadi</strong> — the Wrestler-Cat from the story-within-a-story, same spined silhouette, same patience</div>
+        <div class="compare-cell dim-label">2 · Slow</div>
+        <div class="compare-cell"><strong>Ìjàmbá</strong> — a bald, heavily-built ogre, hunched and
+        bare-chested, blocking the path further from the village than Erú</div>
+        <div class="compare-cell"><strong>Ológbò Ìjàkadì</strong> — the Wrestler-Cat from the
+        story-within-a-story, upright and tan-furred, already taller than the hero</div>
       </div>
       <div class="compare-row">
-        <div class="compare-cell dim-label">Titan</div>
-        <div class="compare-cell"><strong>Agbako</strong> — moss-headed, mismatched white legs, deepest before the boss</div>
-        <div class="compare-cell"><strong>Eja Jagunjagun</strong> — a crowned warrior-fish guarding Arogidigba's kingdom, spear-armed</div>
+        <div class="compare-cell dim-label">3 · Guard</div>
+        <div class="compare-cell"><strong>Àgbàkò</strong> — towering, moss-crowned, bark-textured torso over
+        pale, mismatched clawed legs — the forest's principal antagonist</div>
+        <div class="compare-cell"><strong>Ejá Jagunjagun</strong> — Arogidigba's guardian, still rendering as
+        a cluster of arms splayed around a spear, now floating in open water rather than inside the canopy;
+        see the callout below</div>
       </div>
       <div class="compare-row">
-        <div class="compare-cell dim-label">Riddle boss</div>
-        <div class="compare-cell"><strong>Oba Eye</strong>, the Ostrich-King — feathered, branch-crowned, harmless unless provoked</div>
-        <div class="compare-cell"><strong>Arogidigba</strong>, the mermaid queen — trials designed for failure, per the source book</div>
-      </div>
-      <div class="compare-row">
-        <div class="compare-cell dim-label">Guide spirit</div>
-        <div class="compare-cell"><strong>Ghommid</strong> (Elere) — wandering, non-hostile, each carrying a smaller riddle</div>
-        <div class="compare-cell"><strong>Iya Ireke</strong> — the protagonist's dead mother's spirit, his actual guide through the trials in the book</div>
+        <div class="compare-cell dim-label">4 · Boss</div>
+        <div class="compare-cell"><strong>Ọba Ẹyẹ</strong>, the Ostrich-King — tall, feathered, a legible
+        spiked crown on a human-proportioned head, a riddle encounter rather than a straight fight</div>
+        <div class="compare-cell"><strong>Arogidigba</strong>, the mermaid queen — now floating clear of the
+        canopy: a golden head, a pale scalloped collar or fin at the chest, and a long tail fading from white
+        to teal, a riddle encounter per the source book</div>
       </div>
     </div>
 
     <div class="callout callout-warn">
       <span class="callout-icon">🧱</span>
       <div class="callout-body">
-        <strong>What's placeholder and what isn't</strong>
-        <p>The seven custom character/creature models in each kingdom came out of a Tripo/Meshy prompt list
-        (<code>irekeonibudo-meshy_prompts.txt</code>) — that's the smooth, sculpted cast you'll see below.
-        The trees and mushrooms are Kenney/Poly Haven CC0 kit assets, low-poly on purpose, holding the
-        place until a custom flora pass is worth the credits.</p>
+        <strong>One fix landed, one didn't — and the byte diff shows why</strong>
+        <p>Five files were re-rendered for this revision (<code>ireke_05</code> through <code>ireke_09</code>),
+        and checking them against the previous upload byte-for-byte confirms exactly what changed: the camera
+        and tree placement moved so neither creature is occluded by canopy foliage anymore. That's a staging
+        fix, not a model fix — and it landed differently on the two creatures it touched. Arogidigba now reads
+        clearly: golden head, a pale fin or collar shape at the chest, a tail fading from white to teal. Ejá
+        Jagunjagun is unchanged underneath — still a symmetrical spread of arms around a thin spear, no head
+        or torso of its own — it's just easier to see that now that it isn't half-buried in a tree. Getting a
+        clear look at an unfinished model is progress, but it isn't the same as the model being finished.</p>
       </div>
     </div>
   </section>
@@ -339,98 +350,115 @@
   <!-- ═══ SECTION: IREKE GALLERY ═══ -->
   <section>
     <div class="section-kicker sea">Ìjọba Omi — The Undersea Kingdom</div>
-    <h2>Ìrèké Oníbùdó: Ten Shots From the Reef</h2>
+    <h2>Ìrèké Oníbùdó: Four Duels From the Reef</h2>
     <p>
-      A shipwrecked traveler swept into Arogidigba's undersea kingdom, guided through her trials by his dead
-      mother's spirit — that's the book's actual premise, and it's the one <code>SceneSetupWizard</code>
-      builds when you run <strong>Ireke Onibudo → Build Entire Universe</strong>. Coral-reef stand-ins
-      instead of forest, a riverside hub instead of a village, the same three-preset cast wearing this
-      story's names.
+      A shipwrecked traveler swept into Arogidigba's undersea kingdom — pale tunic, sword at the hip, bare
+      feet — squares off against three guardians and the queen herself, each duel shot from at least two
+      angles. The setting reads as a flat tan riverbank against a dark teal sky, a band of water behind the
+      player, and low-poly faceted trees standing in for the reef canopy — no mushrooms here, that motif
+      belongs to the forest side.
     </p>
 
+    <h3>Duel 1 · vs. Ejo Fifo</h3>
     <div class="shot">
-      <span class="shot-tag boss">Boss encounter</span>
-      <img src="screenshots/ireke_01_showdown_wide.png" alt="Ireke Onibudo protagonist facing Arogidigba the mermaid queen among the reef-trees">
+      <span class="shot-tag swift">Fast · Ejo Fifo</span>
+      <img src="screenshots/ireke_01_ireke_vs_ejofifo_wide.png" alt="Ireke facing Ejo Fifo, a winged teal serpent coiled in the tree canopy, wide shot across the riverbank">
       <div class="shot-caption">
-        <span class="cap-title">The Showdown, Wide</span>
-        <p>Arogidigba looms over the hero at full height against the grove — the wide establishing shot for
-        what the book frames as a trial, not a fight. She only turns hostile if it's failed.</p>
+        <span class="cap-title">Wide, First Contact</span>
+        <p>Ejo Fifo reads as a small winged dragon more than a snake — clawed wings and a coiled tail wrapped
+        around the trunk, perched at canopy height while Ireke gestures up at it from the ground.</p>
+      </div>
+    </div>
+    <div class="shot">
+      <span class="shot-tag swift">Fast · Ejo Fifo</span>
+      <img src="screenshots/ireke_02_ireke_vs_ejofifo_lowangle.png" alt="Low-angle view of Ejo Fifo coiled in the canopy above Ireke">
+      <div class="shot-caption">
+        <span class="cap-title">Low Angle</span>
+        <p>Closer and lower — the coil is easier to read from here, wings half-folded, head lowered toward
+        the ground rather than in flight.</p>
       </div>
     </div>
 
+    <h3>Duel 2 · vs. Ológbò Ìjàkadì</h3>
     <div class="shot">
-      <span class="shot-tag boss">Boss · close-up</span>
-      <img src="screenshots/ireke_07_arogidigba_closeup.png" alt="Close-up of Arogidigba the mermaid queen showing her crown and blue-tipped tail">
+      <span class="shot-tag brute">Slow · Ológbò Ìjàkadì</span>
+      <img src="screenshots/ireke_03_ireke_vs_ologbo_wide.png" alt="Ireke facing Ologbo Ijakadi, an upright tan wrestling-cat with arms spread, wide shot near the tree line">
       <div class="shot-caption">
-        <span class="cap-title">Arogidigba, Close</span>
-        <p>Crown, trailing hair, a tail that fades from gold to the reef's own blue at the fin — the detail
-        pass the wide shot above doesn't have room for.</p>
+        <span class="cap-title">Standing Ground</span>
+        <p>An upright, tan-furred cat-humanoid, whiskered and broad-shouldered, arms spread wide — no spines
+        or armor plating, just bulk. Already taller than Ireke before either one moves.</p>
+      </div>
+    </div>
+    <div class="shot">
+      <span class="shot-tag brute">Slow · Ológbò Ìjàkadì</span>
+      <img src="screenshots/ireke_04_ireke_vs_ologbo_alt.png" alt="Ologbo Ijakadi mid-lunge among faceted trees, seen from the creature's side of the encounter">
+      <div class="shot-caption">
+        <span class="cap-title">Mid-Lunge, Reverse Angle</span>
+        <p>Shot from behind the creature toward Ireke — the long, tapering tail is visible here, absent from
+        the front-on framing above.</p>
+      </div>
+    </div>
+    <div class="shot">
+      <span class="shot-tag brute">Slow · Ológbò Ìjàkadì</span>
+      <img src="screenshots/ireke_10_ireke_vs_ologbo_dusk.png" alt="The Ologbo Ijakadi encounter repeated under cooler dusk lighting">
+      <div class="shot-caption">
+        <span class="cap-title">Same Duel, Dusk</span>
+        <p>Identical staging under a cooler, more violet directional light — the wizard's lighting rig run
+        toward its blue end instead of the warm default.</p>
       </div>
     </div>
 
+    <h3>Duel 3 · vs. Ejá Jagunjagun</h3>
     <div class="shot">
-      <span class="shot-tag swift">Swift · Ejo Fifo</span>
-      <img src="screenshots/ireke_02_vs_ejofifo.png" alt="Hero encountering Ejo Fifo the flying snake near the tree line">
+      <span class="shot-tag titan">Guard · Ejá Jagunjagun</span>
+      <img src="screenshots/ireke_05_ireke_vs_ejajagun_wide.png" alt="Ireke facing a cluster of pale arms splayed around a spear, now floating clear of the tree, standing in for Eja Jagunjagun, wide shot">
       <div class="shot-caption">
-        <span class="cap-title">Ejo Fifo, Mid-Flight</span>
-        <p>The flying snake that seizes a princess in the source book — the Swift preset here, glimpsed
-        low against the trunk rather than standing still to be admired, which is the point of "fast,
-        fragile."</p>
+        <span class="cap-title">Re-rendered — Same Creature, Clearer View</span>
+        <p>Moved out from inside the canopy into open water, so the model is now fully visible instead of
+        half-hidden — but what's visible is the same thing as before: no crown, no fish body, no single
+        readable silhouette, just a symmetrical fan of arms around a thin spear. The staging changed; the
+        model didn't.</p>
+      </div>
+    </div>
+    <div class="shot">
+      <span class="shot-tag titan">Guard · Ejá Jagunjagun</span>
+      <img src="screenshots/ireke_06_ireke_vs_ejajagun_moonlit.png" alt="The same arm-cluster creature floating clear of the tree under cooler moonlit lighting">
+      <div class="shot-caption">
+        <span class="cap-title">Same Encounter, Moonlit</span>
+        <p>Confirms the fix was staging, not sculpt — the cooler light and open framing make the arm-cluster
+        easier to see, not different.</p>
       </div>
     </div>
 
+    <h3>Duel 4 · Boss — vs. Arogidigba</h3>
     <div class="shot">
-      <span class="shot-tag brute">Brute · Ologbo Ijakadi</span>
-      <img src="screenshots/ireke_03_vs_ologbo.png" alt="Hero facing Ologbo Ijakadi, the spined Wrestler-Cat, taller than the player">
+      <span class="shot-tag boss">Boss · Arogidigba</span>
+      <img src="screenshots/ireke_07_ireke_vs_arogidigba_wide.png" alt="Ireke facing Arogidigba, now floating clear of the canopy: a golden head, a pale collar or fin shape at the chest, arms outstretched, and a long tail fading from white to teal">
       <div class="shot-caption">
-        <span class="cap-title">Ologbo Ijakadi Rears Up</span>
-        <p>The Wrestler-Cat from the story-within-a-story — spined, coiled, and already taller than the
-        hero before the fight starts. Same Brute stat curve as Ijamba on the forest side, different
-        silhouette entirely.</p>
+        <span class="cap-title">Re-rendered — This One Landed</span>
+        <p>Pulled clear of the tree, and it reads: a golden domed head, arms out, a pale scalloped shape at
+        the chest that could be a collar or fin, and a tail that shifts from bone-white to teal on the way
+        down. This is the first shot in either kingdom where Arogidigba looks like a queen rather than a
+        shape caught in the foliage.</p>
       </div>
     </div>
-
     <div class="shot">
-      <span class="shot-tag titan">Titan · Eja Jagunjagun</span>
-      <img src="screenshots/ireke_04_vs_ejajagun.png" alt="Hero facing the crowned warrior-fish Eja Jagunjagun with a spear extended">
+      <span class="shot-tag boss">Boss · Arogidigba</span>
+      <img src="screenshots/ireke_08_ireke_vs_arogidigba_lowangle.png" alt="Low-angle view of Arogidigba floating above Ireke, clear of the canopy">
       <div class="shot-caption">
-        <span class="cap-title">Eja Jagunjagun, Spear Extended</span>
-        <p>Crowned and towering — Arogidigba's warrior-fish guard, deepest in the kingdom before the queen
-        herself. The Titan preset's reach shows here: that spear crosses most of the frame.</p>
+        <span class="cap-title">Low Angle</span>
+        <p>Same figure from below, fully clear of the tree line now — no crown is visible on the domed head
+        despite the caption bar's "crowned and rising," which is worth another look next pass.</p>
       </div>
     </div>
-
     <div class="shot">
-      <span class="shot-tag guide">Guide · Iya Ireke</span>
-      <img src="screenshots/ireke_05_iyaireke.png" alt="Iya Ireke, the mother's spirit guide, draped in flowing robes with arms outstretched">
+      <span class="shot-tag boss">Boss · Arogidigba</span>
+      <img src="screenshots/ireke_09_ireke_vs_arogidigba_epic.png" alt="Wide distant shot showing Arogidigba's scale against Ireke, alone at the river's edge, now floating in open air beside the tree rather than inside it">
       <div class="shot-caption">
-        <span class="cap-title">Iya Ireke, Arms Open</span>
-        <p>Not a generic NPC — the protagonist's actual mother's spirit from the book, the one who guides him
-        through Arogidigba's trials. Pale, draped, and deliberately still against the reef's motion.</p>
-      </div>
-    </div>
-
-    <div class="film-strip">Establishing · Action · Pack · Mood</div>
-    <div class="shot-grid">
-      <div class="shot">
-        <span class="shot-tag player">Establishing</span>
-        <img src="screenshots/ireke_06_establishing.png" alt="Wide establishing shot of the undersea kingdom's coral-tree grove">
-        <div class="shot-caption"><p>The reef grove from a distance — the hub-and-kingdom layout ported straight from <code>ogbojuode-3d</code>'s forest, same bones, different dressing.</p></div>
-      </div>
-      <div class="shot">
-        <span class="shot-tag player">Player action</span>
-        <img src="screenshots/ireke_08_player_action.png" alt="Hero seen from behind mid-action with blade at the hip">
-        <div class="shot-caption"><p>From behind, Idà (the blade) at the hip — the pose Egbe's teleport leaves you in mid-cast.</p></div>
-      </div>
-      <div class="shot">
-        <span class="shot-tag player">Full pack</span>
-        <img src="screenshots/ireke_09_pack.png" alt="Full cast shot with the flying snake, warrior-fish, and hero together in the grove">
-        <div class="shot-caption"><p>Ejo Fifo aloft, Eja Jagunjagun grounded, hero between them — the closest thing to a cast photo this kingdom has.</p></div>
-      </div>
-      <div class="shot">
-        <span class="shot-tag player">Mood</span>
-        <img src="screenshots/ireke_10_moonlit_mood.png" alt="Hero alone in a dusk blue-toned grove">
-        <div class="shot-caption"><p>Same directional "moonlight" the wizard sets up by default, no extra lighting pass — just a colder angle on it.</p></div>
+        <span class="cap-title">Full Scale, From a Distance</span>
+        <p>Pulled back to the same wide framing as before, but the figure now floats beside the tree instead
+        of inside it — the gold head and white-to-teal tail are legible even at this distance, which they
+        weren't in the previous version of this shot.</p>
       </div>
     </div>
   </section>
@@ -438,89 +466,107 @@
   <!-- ═══ SECTION: OGBO GALLERY ═══ -->
   <section>
     <div class="section-kicker forest">Igbó Ìrèké — The Forest</div>
-    <h2>Ogboju Ode: Ten Shots From the Tree Line</h2>
+    <h2>Ogboju Ode: Four Duels From the Tree Line</h2>
     <p>
-      Akara-Ogun, machete and musket, working out from a hub village toward the Ostrich-King deep in the
-      forest — the older of the two projects, and the one the second kingdom's architecture was copied from.
-      Same wizard menu command, same three-preset cast, warmer and greener than the reef.
+      Akara-Ogun — gourds and charms strung at the belt, a carved weapon in hand — works outward from the
+      village through the same four-tier structure, against a warmer olive-and-brown palette with mushroom
+      rings marking each creature's ground. These captions are the ones that supplied the "fast, fragile" and
+      "slow, brutal" language used above; they're the game's own words, not added for this article.
     </p>
 
+    <h3>Duel 1 · vs. Erú</h3>
     <div class="shot">
-      <span class="shot-tag titan">Titan · Agbako</span>
-      <img src="screenshots/ogbo_01_showdown_wide.png" alt="Akara-Ogun facing Agbako the towering brute near a mushroom patch">
+      <span class="shot-tag swift">Fast · Erú</span>
+      <img src="screenshots/ogbo_01_akara_vs_eru_wide.png" alt="Akara-Ogun facing Eru, a green leaf-skinned spirit with spiked foliage hair, at the forest edge among mushrooms">
       <div class="shot-caption">
-        <span class="cap-title">Agbako, Full Height</span>
-        <p>The wide establishing confrontation on this side — Agbako's full silhouette against the tree
-        line, deepest of the three creatures before the boss, a mushroom ring marking his ground.</p>
+        <span class="cap-title">First Trial, Forest's Edge</span>
+        <p>Erú is fully green — leaf-textured skin, a crown of spiked foliage, thin arachnid-thin limbs —
+        standing near the tree line rather than emerging from the mushroom ring beside it.</p>
+      </div>
+    </div>
+    <div class="shot">
+      <span class="shot-tag swift">Fast · Erú</span>
+      <img src="screenshots/ogbo_02_akara_vs_eru_dusk.png" alt="The same Eru encounter at dusk under warm brown lighting">
+      <div class="shot-caption">
+        <span class="cap-title">Same Duel, Dusk</span>
+        <p>Warm brown replacing the olive daylight tone — same pose, same distance from the mushroom cluster.</p>
       </div>
     </div>
 
+    <h3>Duel 2 · vs. Ìjàmbá</h3>
     <div class="shot">
-      <span class="shot-tag swift">Swift · Eru</span>
-      <img src="screenshots/ogbo_02_vs_eru.png" alt="Akara-Ogun facing Eru, a clawed hand erupting from a mushroom ring">
+      <span class="shot-tag brute">Slow · Ìjàmbá</span>
+      <img src="screenshots/ogbo_03_akara_vs_ijamba_wide.png" alt="Akara-Ogun facing Ijamba, a bald muscular ogre with arms spread, deeper in the forest">
       <div class="shot-caption">
-        <span class="cap-title">Eru Breaks the Ring</span>
-        <p>Just a hand and a shoulder clearing the mushrooms — Eru doesn't linger long enough for a full
-        pose, which is exactly what "fast, fragile" is supposed to look like from a distance.</p>
+        <span class="cap-title">Deeper Into the Forest</span>
+        <p>Bald, heavily muscled, entirely bare — a hunched ogre-type with no spines or plating, arms thrown
+        wide, blocking the path further out than Erú does.</p>
+      </div>
+    </div>
+    <div class="shot">
+      <span class="shot-tag brute">Slow · Ìjàmbá</span>
+      <img src="screenshots/ogbo_04_akara_vs_ijamba_close.png" alt="Close view of Ijamba's hunching stance">
+      <div class="shot-caption">
+        <span class="cap-title">Close Quarters</span>
+        <p>The in-frame caption on this one says it plainly: the hunch is the creature's actual modeled pose,
+        not an animation glitch caught mid-frame.</p>
       </div>
     </div>
 
+    <h3>Duel 3 · vs. Àgbàkò</h3>
     <div class="shot">
-      <span class="shot-tag brute">Brute · Ijamba</span>
-      <img src="screenshots/ogbo_03_vs_ijamba.png" alt="Akara-Ogun facing the slow, spined Ijamba">
+      <span class="shot-tag titan">Guard · Àgbàkò</span>
+      <img src="screenshots/ogbo_05_akara_vs_agbako_wide.png" alt="Akara-Ogun facing Agbako, a towering mossy-headed giant with a dark bark-textured torso and pale mismatched legs">
       <div class="shot-caption">
-        <span class="cap-title">Ijamba Holds Its Ground</span>
-        <p>Same spined body plan as the reef's Ologbo Ijakadi — the Brute preset's shared mesh, unhidden
-        this close together in the series.</p>
+        <span class="cap-title">The Forest's Deepest Threat</span>
+        <p>A moss-and-leaf crown over a dark, bark-textured torso and arms, set on pale, almost bone-white
+        lower legs with clawed feet — the mismatch reads as intentional, not an unfinished texture pass.</p>
+      </div>
+    </div>
+    <div class="shot">
+      <span class="shot-tag titan">Guard · Àgbàkò</span>
+      <img src="screenshots/ogbo_06_akara_vs_agbako_lowangle.png" alt="Low-angle view of Agbako looming at full height">
+      <div class="shot-caption">
+        <span class="cap-title">Low Angle</span>
+        <p>Shot from near ground level — the height difference against Akara-Ogun is clearest here.</p>
+      </div>
+    </div>
+    <div class="shot">
+      <span class="shot-tag titan">Guard · Àgbàkò</span>
+      <img src="screenshots/ogbo_07_akara_vs_agbako_epic.png" alt="Wide distant shot showing Agbako's scale against Akara-Ogun in the forest clearing">
+      <div class="shot-caption">
+        <span class="cap-title">Full Scale</span>
+        <p>Pulled back to a wide clearing shot — Akara-Ogun reduced to a small silhouette against Àgbàkò's
+        full height.</p>
       </div>
     </div>
 
+    <h3>Duel 4 · Boss — vs. Ọba Ẹyẹ (the Ostrich-King)</h3>
     <div class="shot">
-      <span class="shot-tag boss">Boss · Oba Eye</span>
-      <img src="screenshots/ogbo_04_ostrich_king.png" alt="The Ostrich-King, feathered and branch-crowned, wings spread">
+      <span class="shot-tag boss">Boss · Ọba Ẹyẹ</span>
+      <img src="screenshots/ogbo_08_akara_vs_ostrichking_wide.png" alt="Akara-Ogun facing the Ostrich-King, a tall crowned bird with wings spread, wide shot">
       <div class="shot-caption">
-        <span class="cap-title">Oba Eye, Wings Spread</span>
-        <p>Branch-crowned and half-feathered — the Ostrich-King's riddle encounter, harmless if left alone,
-        the way the book and the wizard's setup both intend it.</p>
+        <span class="cap-title">Deepest in the Forest</span>
+        <p>A tall ostrich-like bird with a spiked, crown-like head ornament and both wings spread wide — the
+        crown is clean and legible here, unlike either canopy-bound creature on the reef side.</p>
       </div>
     </div>
-
     <div class="shot">
-      <span class="shot-tag guide">Guide · Ghommid</span>
-      <img src="screenshots/ogbo_05_ghommid.png" alt="A mossy green Ghommid forest spirit mid-climb near the trees">
+      <span class="shot-tag boss">Boss · Ọba Ẹyẹ</span>
+      <img src="screenshots/ogbo_09_akara_vs_ostrichking_close.png" alt="Close view of the Ostrich-King's crowned head">
       <div class="shot-caption">
-        <span class="cap-title">A Ghommid, Mid-Climb</span>
-        <p>One of three wandering Elere spirits, each carrying a smaller riddle of their own — moss-green
-        and caught here climbing rather than standing still for the screenshot.</p>
+        <span class="cap-title">Face to Face</span>
+        <p>The in-frame caption calls this out directly: a human-proportioned, crowned head is what marks it
+        as a spirit-king rather than a plain bird.</p>
       </div>
     </div>
-
-    <div class="film-strip">Establishing · Close-up · Action · Pack · Mood</div>
-    <div class="shot-grid">
-      <div class="shot">
-        <span class="shot-tag player">Establishing</span>
-        <img src="screenshots/ogbo_06_establishing.png" alt="Wide establishing shot of the forest grove near the hub village">
-        <div class="shot-caption"><p>The tree line and a mushroom patch, Akara-Ogun small against both — the layout this project's undersea sibling later copied.</p></div>
-      </div>
-      <div class="shot">
-        <span class="shot-tag titan">Agbako close-up</span>
-        <img src="screenshots/ogbo_07_agbako_closeup.png" alt="Close-up on Agbako showing mossy head and mismatched white lower legs">
-        <div class="shot-caption"><p>Close enough to see the mismatch — moss-covered torso, pale scarred legs, a Titan built to look like he's survived worse fights than yours.</p></div>
-      </div>
-      <div class="shot">
-        <span class="shot-tag player">Player action</span>
-        <img src="screenshots/ogbo_08_player_action.png" alt="Akara-Ogun in profile holding the machete steady">
-        <div class="shot-caption"><p>Machete held low, profile view — the idle stance between swings, musket left holstered for this shot.</p></div>
-      </div>
-      <div class="shot">
-        <span class="shot-tag player">Full pack</span>
-        <img src="screenshots/ogbo_09_pack.png" alt="Akara-Ogun, a Ghommid spirit, and Agbako together in the grove">
-        <div class="shot-caption"><p>Hunter, spirit, and Titan sharing one frame — the forest's answer to the reef's cast photo above.</p></div>
-      </div>
-      <div class="shot">
-        <span class="shot-tag player">Mood</span>
-        <img src="screenshots/ogbo_10_dusk_mood.png" alt="Akara-Ogun alone at dusk near a mushroom patch, warm-toned lighting">
-        <div class="shot-caption"><p>Warm dusk tone instead of the reef's cold moonlight — same wizard-built lighting rig, opposite end of its range.</p></div>
+    <div class="shot">
+      <span class="shot-tag boss">Boss · Ọba Ẹyẹ</span>
+      <img src="screenshots/ogbo_10_akara_vs_ostrichking_dusk.png" alt="The Ostrich-King encounter at dusk under warm brown lighting">
+      <div class="shot-caption">
+        <span class="cap-title">Last Trial, Dusk</span>
+        <p>Same standoff, same wings-spread pose, the warm dusk tone applied consistently across this
+        kingdom's last three shots.</p>
       </div>
     </div>
   </section>
@@ -528,40 +574,40 @@
   <!-- ═══ SECTION: STATS ═══ -->
   <section>
     <div class="section-kicker">Tally</div>
-    <h2>What Twenty Screenshots Actually Confirm</h2>
+    <h2>What Twenty Duel Screenshots Actually Confirm</h2>
     <div class="stat-strip">
-      <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">kingdoms, one shared architecture</div></div>
-      <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">CreatureAI presets, six creature names</div></div>
-      <div class="stat-box"><div class="stat-num">7</div><div class="stat-label">AI-generated custom models per kingdom</div></div>
-      <div class="stat-box"><div class="stat-num">20</div><div class="stat-label">screenshots, zero restaged</div></div>
+      <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">kingdoms, one shared duel structure</div></div>
+      <div class="stat-box"><div class="stat-num">4</div><div class="stat-label">duels per kingdom, same tier order</div></div>
+      <div class="stat-box"><div class="stat-num">20</div><div class="stat-label">screenshots, every one mid-encounter</div></div>
+      <div class="stat-box"><div class="stat-num">1</div><div class="stat-label">creature that still doesn't read as designed</div></div>
     </div>
     <p>
-      None of this replaces the riddle UI, the dialogue box, or the Unity Editor compile check that Part VI
-      left open — those are still open. What this pass confirms is narrower and, until now, unverified:
-      that <strong>Build Entire Universe</strong> in both projects produces an actual scene with an actual
-      cast standing in it, not just a console log saying it should.
+      That's down from two after the re-render. Arogidigba's fix confirms the count moves in both directions —
+      a corrected shot should be reported as corrected, not left flagged out of caution. Ejá Jagunjagun is the
+      one still open: seven of the eight creatures across both kingdoms now read clearly as their named
+      designs, and one is still a cluster of arms around a spear, now simply easier to see as one.
     </p>
   </section>
 
   <!-- ═══ CONCLUSION ═══ -->
   <section>
     <div class="section-kicker">Conclusion</div>
-    <h2>The Same Rule, Applied to Pixels This Time</h2>
+    <h2>The Same Rule, Applied a Third Time</h2>
     <p>
-      Part VI's closing line was that the only source of truth is the diff — that a description of work
-      drifts from the work itself unless someone checks the actual files every time. Screenshots are the
-      same discipline turned on the render instead of the source: not a mood-boarded mockup of what
-      Arogidigba's kingdom might look like, but <code>ls -l</code> and twenty files that were actually
-      copied off an actual Play-mode session. The next entry that owes the series a compile check and a
-      riddle UI still owes them. This one only owed proof that there was something on screen worth checking
-      against — there is, and now it's on record.
+      Two flagged creatures came back as one fix and one non-fix, and a byte-level diff of the re-uploaded
+      files is what made the difference legible: both re-renders were the same staging change — creature
+      moved clear of the tree — and that change was enough to complete Arogidigba's design and not enough to
+      touch Ejá Jagunjagun's. The honest version of this update is a downgrade from two open issues to one,
+      not a clean bill. The next entry that owes the series a compile check and a riddle UI still owes them,
+      and now it owes a pass at giving Ejá Jagunjagun an actual head and body rather than a wider view of the
+      one it already has.
     </p>
   </section>
 
   <!-- ═══ FOOTER ═══ -->
   <footer class="article-footer">
     <div class="footer-left">
-      <p>Twenty screenshots, ten per kingdom, deployed to irekeonibudo-3d/screenshots/ — the shared Swift/Brute/Titan cast seen on screen for the first time in this series.</p>
+      <p>Twenty screenshots, ten per kingdom, four duels each, deployed to irekeonibudo-3d/screenshots/ — every frame checked against what it actually shows.</p>
       <p>github.com/niyid/ogbojuode-3d · github.com/niyid/irekeonibudo-3d · github.com/niyid/irekeonibudo · github.com/niyid/ogbojuode</p>
     </div>
     <div class="footer-links">
