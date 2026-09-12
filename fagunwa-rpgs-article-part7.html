@@ -232,7 +232,7 @@
 
   <!-- ═══ HERO ═══ -->
   <header class="hero">
-    <div class="hero-eyebrow">Part VII · Second Revision · 5 Shots Corrected</div>
+    <div class="hero-eyebrow">Part VII · Third Revision · 2 Shots Re-rendered</div>
 
     <div class="hero-image">
       <img src="fagunwa3.png" alt="Header image for the Fagunwa RPG series, Part VII">
@@ -255,14 +255,14 @@
     </div>
 
     <p class="hero-lead">
-      This entry has now been checked against its own screenshots twice. The first pass mixed establishing
-      and mood shots in with the fights; the redo dropped those and kept only in-duel captures, which is when
-      two of the eight creatures — Ejá Jagunjagun and Arogidigba — turned out not to visually match their
-      names. Five files have since been re-rendered: <code>ireke_05</code> through <code>ireke_09</code>, the
-      same two encounters. Comparing the new files to the old ones byte-for-byte shows exactly what changed —
-      both creatures were pulled out from inside the tree canopy into open space, which is a camera/staging
-      fix, not a model fix. That happens to be enough to make one of the two read correctly, and not enough
-      for the other. Details below, per shot.
+      This entry has now been checked against its own screenshots three times. The first pass mixed
+      establishing and mood shots in with the fights; the second dropped those and kept only in-duel captures,
+      which is when two of the eight creatures — Ejá Jagunjagun and Arogidigba — turned out not to visually
+      match their names. The five affected files (<code>ireke_05</code> through <code>ireke_09</code>) have
+      since gone through another render pass. This time the two encounters split further apart: Arogidigba now
+      reads correctly, crown included, while Ejá Jagunjagun came back as a different creature altogether —
+      still not the fish-tailed figure from the story, just a more coherent wrong thing than before. Details
+      below, per shot.
     </p>
   </header>
 
@@ -341,15 +341,17 @@
     <div class="callout callout-warn">
       <span class="callout-icon">🧱</span>
       <div class="callout-body">
-        <strong>One fix landed, one didn't — and the byte diff shows why</strong>
+        <strong>One fix landed, one turned into a different problem</strong>
         <p>Five files were re-rendered for this revision (<code>ireke_05</code> through <code>ireke_09</code>),
-        and checking them against the previous upload byte-for-byte confirms exactly what changed: the camera
-        and tree placement moved so neither creature is occluded by canopy foliage anymore. That's a staging
-        fix, not a model fix — and it landed differently on the two creatures it touched. Arogidigba now reads
-        clearly: golden head, a pale fin or collar shape at the chest, a tail fading from white to teal. Ejá
-        Jagunjagun is unchanged underneath — still a symmetrical spread of arms around a thin spear, no head
-        or torso of its own — it's just easier to see that now that it isn't half-buried in a tree. Getting a
-        clear look at an unfinished model is progress, but it isn't the same as the model being finished.</p>
+        and checking them against the previous upload confirms both creatures were pulled clear of the canopy
+        so neither is occluded by foliage anymore. That's a staging fix, and it landed differently on the two
+        creatures it touched. Arogidigba now reads clearly: golden crowned head, a pale fin or collar shape at
+        the chest, a tail fading from white to teal — the crown that a prior pass said was missing is visible
+        here. Ejá Jagunjagun went a different direction: instead of the arm-cluster from before, it's now a
+        complete clawed humanoid figure, teal-skinned, with its own head and torso — a real silhouette, just
+        not Fagunwa's fish-tailed sentinel, and with an unattached dagger-like shape floating near the tree
+        that belongs to neither the creature nor the player. Getting a clear look at a model is progress, but
+        it isn't the same as the model matching the name over its head.</p>
       </div>
     </div>
   </section>
@@ -418,22 +420,24 @@
     <h3>Duel 3 · vs. Ejá Jagunjagun</h3>
     <div class="shot">
       <span class="shot-tag titan">Guard · Ejá Jagunjagun</span>
-      <img src="screenshots/ireke_05_ireke_vs_ejajagun_wide.png" alt="Ireke facing a cluster of pale arms splayed around a spear, now floating clear of the tree, standing in for Eja Jagunjagun, wide shot">
+      <img src="screenshots/ireke_05_ireke_vs_ejajagun_wide.png" alt="Ireke facing a clawed teal humanoid creature standing beside the tree, with a small dagger-like object floating near the trunk, standing in for Eja Jagunjagun, wide shot">
       <div class="shot-caption">
-        <span class="cap-title">Re-rendered — Same Creature, Clearer View</span>
-        <p>Moved out from inside the canopy into open water, so the model is now fully visible instead of
-        half-hidden — but what's visible is the same thing as before: no crown, no fish body, no single
-        readable silhouette, just a symmetrical fan of arms around a thin spear. The staging changed; the
-        model didn't.</p>
+        <span class="cap-title">Re-rendered — A Different Creature Entirely</span>
+        <p>This is a third revision, and it reads as something else again: a full-bodied clawed humanoid,
+        teal-skinned, with a face, torso, and limbs — not the arm-cluster from the previous pass. A small
+        dagger or spear-like shape floats near the trunk above it, disconnected from the body rather than
+        held by it. It's a coherent silhouette now, which is progress, but it's not obviously Ejá Jagunjagun
+        as Fagunwa describes it either — no fish body, no crown, just an ogre standing next to a tree with a
+        stray weapon hanging in the air nearby.</p>
       </div>
     </div>
     <div class="shot">
       <span class="shot-tag titan">Guard · Ejá Jagunjagun</span>
-      <img src="screenshots/ireke_06_ireke_vs_ejajagun_moonlit.png" alt="The same arm-cluster creature floating clear of the tree under cooler moonlit lighting">
+      <img src="screenshots/ireke_06_ireke_vs_ejajagun_moonlit.png" alt="The same clawed teal creature under cooler moonlit lighting, dagger-like object still floating near the trunk">
       <div class="shot-caption">
         <span class="cap-title">Same Encounter, Moonlit</span>
-        <p>Confirms the fix was staging, not sculpt — the cooler light and open framing make the arm-cluster
-        easier to see, not different.</p>
+        <p>Same creature, same floating dagger near the trunk, just under cooler light — confirms this is the
+        model now, not a lighting artifact.</p>
       </div>
     </div>
 
@@ -454,8 +458,9 @@
       <img src="screenshots/ireke_08_ireke_vs_arogidigba_lowangle.png" alt="Low-angle view of Arogidigba floating above Ireke, clear of the canopy">
       <div class="shot-caption">
         <span class="cap-title">Low Angle</span>
-        <p>Same figure from below, fully clear of the tree line now — no crown is visible on the domed head
-        despite the caption bar's "crowned and rising," which is worth another look next pass.</p>
+        <p>Same figure from below, fully clear of the tree line now — and this pass finally shows the crown:
+        a gold, spiked circlet sitting on top of the domed head, matching the caption bar's "crowned and
+        rising" for the first time.</p>
       </div>
     </div>
     <div class="shot">
@@ -592,7 +597,8 @@
       That's down from two after the re-render. Arogidigba's fix confirms the count moves in both directions —
       a corrected shot should be reported as corrected, not left flagged out of caution. Ejá Jagunjagun is the
       one still open: seven of the eight creatures across both kingdoms now read clearly as their named
-      designs, and one is still a cluster of arms around a spear, now simply easier to see as one.
+      designs, and one has a clear, coherent silhouette but the wrong one — a clawed humanoid rather than
+      Fagunwa's fish-tailed guard, with a stray weapon floating unattached nearby.
     </p>
   </section>
 
@@ -601,13 +607,14 @@
     <div class="section-kicker">Conclusion</div>
     <h2>The Same Rule, Applied a Third Time</h2>
     <p>
-      Two flagged creatures came back as one fix and one non-fix, and a byte-level diff of the re-uploaded
-      files is what made the difference legible: both re-renders were the same staging change — creature
-      moved clear of the tree — and that change was enough to complete Arogidigba's design and not enough to
-      touch Ejá Jagunjagun's. The honest version of this update is a downgrade from two open issues to one,
-      not a clean bill. The next entry that owes the series a compile check and a riddle UI still owes them,
-      and now it owes a pass at giving Ejá Jagunjagun an actual head and body rather than a wider view of the
-      one it already has.
+      Two flagged creatures went into this round of re-renders; one came out fixed and one came out different.
+      Both started from the same staging change — creature pulled clear of the tree — and that was enough to
+      complete Arogidigba's design, crown and all, while Ejá Jagunjagun's underlying model was reworked into
+      something else: no longer an arm-cluster, but also not the fish-tailed guard the name calls for, plus a
+      floating dagger that isn't attached to anything. The honest version of this update is one confirmed fix
+      and one creature that's traded an old problem for a new one. The next entry that owes the series a
+      compile check and a riddle UI still owes them, and now it also owes Ejá Jagunjagun a model that actually
+      matches Fagunwa's description rather than a different silhouette that still doesn't.
     </p>
   </section>
 
